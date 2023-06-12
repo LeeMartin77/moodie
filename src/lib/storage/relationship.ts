@@ -46,3 +46,28 @@ export const createRelationshipInvite = async (inviterid: string, relationshipid
     redeemedbyuserid: null
   };
 }
+
+export const redeemRelationshipInvite = async (inviteid: string, redeemedbyuserid: string): Promise<void> => {
+  await CASSANDRA_CLIENT.execute(
+    `UPDATE moodie.relationship_invite 
+      SET redeemed = ?,
+        redeemedtime = ?,
+        redeemedbyuserid = ?
+      WHERE id = ?`,
+    [true, new Date().toISOString(), redeemedbyuserid, inviteid],
+    { prepare: true }
+  );
+}
+
+export const getRelationshipInvite = async (id: string): Promise<RelationshipInvite | null>  => {
+  const result = await CASSANDRA_CLIENT.execute(
+    'SELECT * FROM moodie.relationship_invite WHERE id = ?;',
+    [id],
+    { prepare: true }
+  );
+  if (result.rows.length < 1) {
+    return null;
+  }
+  return rowToObject<RelationshipInvite>(result.first());
+} 
+

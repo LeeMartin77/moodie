@@ -67,12 +67,7 @@ export const actions = {
       if (!relationships.map(x => x.relationshipid).includes(relationshipid)) {
         throw new Error("Relationship not found")
       }
-
-      const created = await createRelationshipInvite(userId, relationshipid, name);
-      return {
-        relationshipid,
-        invitelink: created.id
-      }
+      return await createRelationshipInvite(userId, relationshipid, name);
 		} catch (error: any) {
 			return fail(422, {
 				error: error.message

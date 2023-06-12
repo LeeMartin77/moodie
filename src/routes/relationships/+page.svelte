@@ -1,8 +1,9 @@
 <script lang="ts">
+	import type { RelationshipInvite } from '$lib/storage';
   import type { ActionData, PageData } from './$types';
 
   export let data: PageData;
-	export let form: ActionData & { invitelink?: string, relationshipid?: string };
+	export let form: ActionData & RelationshipInvite ;
 </script>
 
 <h1>Your Relationships</h1>
@@ -13,8 +14,8 @@
 
 {#each data.relationships as relationship}
   {relationship.name}
-  {#if form?.invitelink && form.relationshipid === relationship.relationshipid}
-    {form.invitelink}
+  {#if form?.relationshipid && form.relationshipid === relationship.relationshipid}
+    <a href={`/relationships/join?inviteid=${form.id}`}>Your invite link</a>
   {/if}
   <form method="POST" action="?/invite">
     <input name="invitername" required/>
