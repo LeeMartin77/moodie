@@ -6,12 +6,12 @@ import {
 } from '$lib/storage';
 import { fail, redirect } from '@sveltejs/kit';
 
-export const load = async ({ url }: PageServerLoadEvent) => {
+export const load = async ({ url, parent }: PageServerLoadEvent) => {
 
-  // TODO: Don't require login
+  const { session } = await parent();
   const id = url.searchParams.get('inviteid');
   if (!id) {
-    throw redirect(302, '/');
+    throw redirect(302, '/relationships');
   }
 
   const relationshipInvite = await getRelationshipInvite(id);
@@ -21,7 +21,9 @@ export const load = async ({ url }: PageServerLoadEvent) => {
   }
 
   return {
-    relationshipInvite
+    relationshipInvite,
+    signedIn: !!session?.user?.email,
+    callbackUrl: `${url.pathname}?inviteid=${id}`
   };
 }
 
