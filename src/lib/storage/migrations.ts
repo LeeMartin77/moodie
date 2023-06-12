@@ -45,6 +45,22 @@ const MIGRATIONS = [
     time timestamp,
     PRIMARY KEY ((relationshipid), userid)
   )`,
+  `CREATE TABLE IF NOT EXISTS moodie.relationship_mood_log_history (
+    relationshipid text,
+    userid text,
+    time timestamp,
+    partnername text,
+    feeling int,
+    moodid text,
+    mood text,
+    positive boolean,
+    negative boolean,
+    needid text,
+    need text,
+    active boolean,
+    passive boolean,
+    PRIMARY KEY ((relationshipid), userid, time)
+  )`,
   `CREATE INDEX IF NOT EXISTS ON moodie.relationship_mood_log (time);`,
 ]
 
