@@ -14,9 +14,6 @@ const MIGRATIONS = [
     active boolean,
     passive boolean
   )`,
-  `CREATE TABLE IF NOT EXISTS moodie.relationship (
-    id text PRIMARY KEY
-  )`,
   `CREATE TABLE IF NOT EXISTS moodie.relationship_invite (
     id text PRIMARY KEY,
     relationshipid text,
@@ -28,15 +25,19 @@ const MIGRATIONS = [
   `CREATE TABLE IF NOT EXISTS moodie.user_relationship (
     userid text,
     relationshipid text,
+    name text,
     PRIMARY KEY ((userid), relationshipid)
   )`,
   `CREATE TABLE IF NOT EXISTS moodie.relationship_mood_log (
     relationshipid text,
     userid text,
     partnername text,
+    feeling int,
+    moodid text,
     mood text,
     positive boolean,
     negative boolean,
+    needid text,
     need text,
     active boolean,
     passive boolean,

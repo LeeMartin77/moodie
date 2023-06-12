@@ -28,16 +28,20 @@ export type RelationshipInvite = {
 
 export type UserRelationship = {
   userid: string,
-  relationshipid: string
+  relationshipid: string,
+  name: string
 }
 
 export type RelationshipMoodLog = {
   relationshipid: string,
   userid: string,
   partnername: string,
+  feeling: number,
+  moodid: string,
   mood: string,
   positive: boolean,
   negative: boolean,
+  needid: string,
   need: string,
   active: boolean,
   passive: boolean,
