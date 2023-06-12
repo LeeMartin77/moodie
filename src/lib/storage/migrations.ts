@@ -70,9 +70,15 @@ const MOOD_SEED_VALUES = [
   ['passive', 'Passive', false, false],
 ]
 
+const NEED_SEED_VALUES = [
+  ['attention', 'Attention', true, false],
+  ['solitude', 'Time to Myself', false, true]
+]
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SEEDS: [string, any[]][] = [
-  ['INSERT INTO moodie.mood (id, name, positive, negative)', MOOD_SEED_VALUES]
+  ['INSERT INTO moodie.mood (id, name, positive, negative)', MOOD_SEED_VALUES],
+  ['INSERT INTO moodie.need (id, name, active, passive)', NEED_SEED_VALUES]
 ]
 
 export const runMigrations = async () => {

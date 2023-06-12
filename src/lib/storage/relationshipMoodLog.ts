@@ -11,3 +11,67 @@ export const getLatestRelationshipMoodLogs = async (relationshipids: string[]): 
 
   return relationshipResults.rows.map(rowToObject) as RelationshipMoodLog[];
 };
+
+export const insertRelationshipMoodLog = async ({ 
+  relationshipid,
+  userid,
+  partnername,
+  feeling,
+  moodid,
+  mood,
+  positive,
+  negative,
+  needid,
+  need,
+  active,
+  passive
+ }: Omit<RelationshipMoodLog, "time">): Promise<void> => {
+  await CASSANDRA_CLIENT.execute(
+    `INSERT INTO moodie.relationship_mood_log (
+      relationshipid,
+      userid,
+      partnername,
+      feeling,
+      moodid,
+      mood,
+      positive,
+      negative,
+      needid,
+      need,
+      active,
+      passive,
+      time
+    )
+    VALUES (
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?,
+      ?
+    )`,
+    [
+      relationshipid,
+      userid,
+      partnername,
+      feeling,
+      moodid,
+      mood,
+      positive,
+      negative,
+      needid,
+      need,
+      active,
+      passive,
+      new Date().toISOString()
+    ],
+    { prepare: true }
+  );
+};
