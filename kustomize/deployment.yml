@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: moodie
+  name: moodie
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moodie
+  template:
+    metadata:
+      labels:
+        app: moodie
+      namespace: moodie
+      name: moodie
+    spec:
+      containers:
+        - name: moodie
+          image: ghcr.io/leemartin77/moodie:bleed
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+            requests:
+              cpu: 500m
+              memory: 500Mi
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: development
+            - name: CASSANDRA_CONTACT_POINTS
+              value: cassandra:9042
+            - name: CASSANDRA_USER
+              valueFrom:
+                secretKeyRef:
+                  name: cassandra-creds
+                  key: cassandrauser
+                  optional: false
+            - name: CASSANDRA_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cassandra-creds
+                  key: cassandrapassword
+                  optional: false
+            - name: AUTH_SECRET
+              value: some-weird-random-string
