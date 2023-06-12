@@ -14,7 +14,7 @@
 
 {#each data.relationships as relationship}
   {relationship.name}
-  {#if form?.relationshipid && form.relationshipid === relationship.relationshipid}
+  {#if form?.relationshipid && form?.id && form.relationshipid === relationship.relationshipid}
     <a href={`/relationships/join?inviteid=${form.id}`}>Your invite link</a>
   {/if}
   <form method="POST" action="?/invite">
