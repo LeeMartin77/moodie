@@ -20,10 +20,11 @@ export type Relationship = {
 export type RelationshipInvite = {
   id: string,
   relationshipid: string,
+  inviterid: string,
   invitername: string,
-  redeemed: boolean | undefined,
-  redeemedtime: string, // ISO 8601 timestamp
-  redeemedbyuserid: string
+  redeemed: boolean,
+  redeemedtime: string | null, // ISO 8601 timestamp
+  redeemedbyuserid: string | null
 }
 
 export type UserRelationship = {

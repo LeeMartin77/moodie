@@ -1,5 +1,5 @@
 import { CASSANDRA_CLIENT } from './config'
-import type { UserRelationship } from './types';
+import type { RelationshipInvite, UserRelationship } from './types';
 import { rowToObject } from './utility'
 import { randomUUID } from 'node:crypto';
 
@@ -25,5 +25,24 @@ export const createUserRelationship = async (userid: string, name: string, relat
     relationshipid,
     userid,
     name
+  };
+}
+
+
+export const createRelationshipInvite = async (inviterid: string, relationshipid: string, invitername: string): Promise<RelationshipInvite> => {
+  const id = randomUUID();
+  await CASSANDRA_CLIENT.execute(
+    'INSERT INTO moodie.relationship_invite (id, inviterid, relationshipid, invitername, redeemed) VALUES (?, ?, ?, ?, ?)',
+    [id, inviterid, relationshipid, invitername, false],
+    { prepare: true }
+  );
+  return {
+    id,
+    relationshipid,
+    inviterid,
+    invitername,
+    redeemed: false,
+    redeemedtime: null,
+    redeemedbyuserid: null
   };
 }

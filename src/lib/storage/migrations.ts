@@ -17,6 +17,7 @@ const MIGRATIONS = [
   `CREATE TABLE IF NOT EXISTS moodie.relationship_invite (
     id text PRIMARY KEY,
     relationshipid text,
+    inviterid text,
     invitername text,
     redeemed boolean,
     redeemedtime timestamp,

@@ -1,7 +1,8 @@
 import type { PageServerLoadEvent } from './$types';
 import {
   getUserRelationships,
-  createUserRelationship
+  createUserRelationship,
+  createRelationshipInvite
 } from '$lib/storage';
 import { error, fail, redirect } from '@sveltejs/kit';
 
@@ -38,7 +39,40 @@ export const actions = {
       if (!name) {
         throw new Error("Name is required")
       }
-      await createUserRelationship(session.user?.email, name)
+      return await createUserRelationship(session.user?.email, name)
+		} catch (error: any) {
+			return fail(422, {
+				error: error.message
+			});
+		}
+	},
+	invite: async ({ request, locals }) => {
+    const session = await locals.getSession();
+    if (!session || !session.user?.email) {
+      throw redirect(302, '/auth/signin');
+    }
+		const data = await request.formData();
+
+    const userId = session.user.email;
+		try {
+      const name = data.get('invitername') as string;
+      const relationshipid = data.get('relationshipid') as string;
+      if (!name) {
+        throw new Error("Inviter name is required")
+      }
+      if (!relationshipid) {
+        throw new Error("relationshipid is required")
+      }
+      const relationships = await getUserRelationships(userId);
+      if (!relationships.map(x => x.relationshipid).includes(relationshipid)) {
+        throw new Error("Relationship not found")
+      }
+
+      const created = await createRelationshipInvite(userId, relationshipid, name);
+      return {
+        relationshipid,
+        invitelink: created.id
+      }
 		} catch (error: any) {
 			return fail(422, {
 				error: error.message
