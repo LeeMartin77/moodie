@@ -8,6 +8,12 @@ const MIGRATIONS = [
     positive boolean,
     negative boolean
   )`,
+  `CREATE TABLE IF NOT EXISTS moodie.need (
+    id text PRIMARY KEY,
+    name text,
+    active boolean,
+    passive boolean
+  )`,
   `CREATE TABLE IF NOT EXISTS moodie.relationship (
     id text PRIMARY KEY
   )`,
@@ -31,6 +37,9 @@ const MIGRATIONS = [
     mood text,
     positive boolean,
     negative boolean,
+    need text,
+    active boolean,
+    passive boolean,
     time timestamp,
     PRIMARY KEY ((relationshipid), userid)
   )`,

@@ -5,6 +5,14 @@ export type Mood = {
   negative: boolean
 }
 
+export type Need = {
+  id: string,
+  name: string,
+  active: boolean,
+  passive: boolean
+}
+
+
 export type Relationship = {
   id: string
 }
@@ -30,5 +38,8 @@ export type RelationshipMoodLog = {
   mood: string,
   positive: boolean,
   negative: boolean,
+  need: string,
+  active: boolean,
+  passive: boolean,
   time: string, // ISO 8601 timestamp
 }
