@@ -1,11 +1,6 @@
 import { CASSANDRA_CLIENT } from './config'
+import type { Mood } from './types';
 import { rowToObject } from './utility'
-export type Mood = {
-  id: string,
-  name: string,
-  positive: boolean,
-  negative: boolean
-}
 
 export const getAllMoods = async () => {
     const result = await CASSANDRA_CLIENT.execute('SELECT * FROM moodie.mood;');
