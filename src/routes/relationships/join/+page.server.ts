@@ -4,7 +4,7 @@ import {
   getRelationshipInvite,
   redeemRelationshipInvite,
 } from '$lib/storage';
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
 
 export const load = async ({ url, parent }: PageServerLoadEvent) => {
 
@@ -41,6 +41,10 @@ export const actions = {
       if (!name) {
         throw new Error("Name is required")
       }
+      const myname = data.get('myname') as string;
+      if (!name) {
+        throw new Error("myname is required")
+      }
       const inviteid = data.get('inviteid') as string;
       if (!inviteid) {
         throw new Error("inviteid is required")
@@ -51,7 +55,7 @@ export const actions = {
         throw redirect(302, '/relationships');
       }
 
-      await createUserRelationship(userid, name, relationshipInvite.relationshipid)
+      await createUserRelationship(userid, name, myname, relationshipInvite.relationshipid)
       await redeemRelationshipInvite(inviteid, userid);
       throw redirect(302, '/relationships');
 		} catch (error: any) {
@@ -60,4 +64,4 @@ export const actions = {
 			});
 		}
 	}
-}
+} satisfies Actions;

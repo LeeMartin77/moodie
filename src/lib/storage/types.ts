@@ -23,14 +23,15 @@ export type RelationshipInvite = {
   inviterid: string,
   invitername: string,
   redeemed: boolean,
-  redeemedtime: string | null, // ISO 8601 timestamp
+  redeemedtime: Date | null,
   redeemedbyuserid: string | null
 }
 
 export type UserRelationship = {
   userid: string,
   relationshipid: string,
-  name: string
+  name: string,
+  myname: string
 }
 
 export type RelationshipMoodLog = {
@@ -46,5 +47,5 @@ export type RelationshipMoodLog = {
   need: string,
   active: boolean,
   passive: boolean,
-  time: string, // ISO 8601 timestamp
+  time: Date,
 }

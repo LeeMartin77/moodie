@@ -1,7 +1,6 @@
 import { CASSANDRA_CLIENT } from './config';
 
 const MIGRATIONS = [
-  ['00001', `CREATE KEYSPACE IF NOT EXISTS moodie WITH REPLICATION = {'class':'SimpleStrategy','replication_factor':1};`],
   ['00002', `CREATE TABLE IF NOT EXISTS moodie.mood (
     id text PRIMARY KEY,
     name text,
@@ -62,6 +61,7 @@ const MIGRATIONS = [
     PRIMARY KEY ((relationshipid), userid, time)
   )`],
   ['00008', `CREATE INDEX IF NOT EXISTS ON moodie.relationship_mood_log (time);`],
+  ['00009', `ALTER TABLE moodie.user_relationship ADD (myname text)`]
 ]
 
 const MOOD_SEED_VALUES = [
@@ -82,6 +82,7 @@ const SEEDS: [string, any[]][] = [
 ]
 
 export const runMigrations = async () => {
+  await CASSANDRA_CLIENT.execute(`CREATE KEYSPACE IF NOT EXISTS moodie WITH REPLICATION = {'class':'SimpleStrategy','replication_factor':1};`)
   await CASSANDRA_CLIENT.execute(`CREATE TABLE IF NOT EXISTS moodie.migrations (key text PRIMARY KEY)`)
   for (const [key, migration] of MIGRATIONS) {
     const res = await CASSANDRA_CLIENT.execute(`SELECT key FROM moodie.migrations WHERE key = ?`, [key], { prepare: true });

@@ -13,18 +13,29 @@
 {/if}
 
 {#each data.relationships as relationship}
-  {relationship.name}
+  <h3>{relationship.name}</h3>
   {#if form?.relationshipid && form?.id && form.relationshipid === relationship.relationshipid}
     <a href={`/relationships/join?inviteid=${form.id}`}>Your invite link</a>
   {/if}
   <form method="POST" action="?/invite">
-    <input name="invitername" required/>
+    <input type="hidden" name="invitername" value={relationship.myname}/>
     <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
-    <button type="submit">Invite</button>
+    <button type="submit">Generate invite</button>
   </form>
 {/each}
+{#if data.relationships.length === 0}
+  <h3>You currently have no moodie relationships</h3>
+{/if}
 
+<h2>Create a new Relationship</h2>
 <form method="POST" action="?/create">
-  <input name="name" required/>
+  <div>
+    <label for="name">Relationship Name</label>
+    <input id="name" name="name" required/>
+  </div>
+  <div>
+    <label for="myname">Your Name</label>
+    <input id="myname" name="myname" required/>
+  </div>
   <button type="submit">Create New</button>
 </form>

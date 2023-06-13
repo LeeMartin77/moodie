@@ -15,16 +15,17 @@ export const getUserRelationships = async (userid: string) => {
 }
 
 
-export const createUserRelationship = async (userid: string, name: string, relationshipid: string = randomUUID()): Promise<UserRelationship> => {
+export const createUserRelationship = async (userid: string, name: string, myname: string, relationshipid: string = randomUUID()): Promise<UserRelationship> => {
   await CASSANDRA_CLIENT.execute(
-    'INSERT INTO moodie.user_relationship (userid, relationshipid, name) VALUES (?, ?, ?)',
-    [userid, relationshipid, name],
+    'INSERT INTO moodie.user_relationship (userid, relationshipid, name, myname) VALUES (?, ?, ?, ?)',
+    [userid, relationshipid, name, myname],
     { prepare: true }
   );
   return {
     relationshipid,
     userid,
-    name
+    name,
+    myname
   };
 }
 

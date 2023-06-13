@@ -6,7 +6,7 @@ import {
   getLatestRelationshipMoodLogs,
   insertRelationshipMoodLog
 } from '$lib/storage';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 
 export const load = async ({ parent }: PageServerLoadEvent) => {
   const { session } = await parent();
@@ -28,6 +28,7 @@ export const load = async ({ parent }: PageServerLoadEvent) => {
     [];
 
   return {
+    userId,
     moods,
     needs,
     userRelationships,
@@ -91,11 +92,10 @@ export const actions = {
         active: need.active,
         passive: need.passive
       })
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		} catch (error: any) {
 			return fail(422, {
 				error: error.message
 			});
 		}
 	}
-}
+} satisfies Actions;

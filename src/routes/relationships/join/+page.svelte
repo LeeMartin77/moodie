@@ -10,7 +10,14 @@
 {:else}
 <form method="POST" action="?/accept">
   <input type="hidden" name="inviteid" value={data.relationshipInvite.id}/>
-  <input name="name" value={`Relationship with ${data.relationshipInvite.invitername}`}/>
+  <div>
+    <label for="name">Relationship Name</label>
+    <input id="name" name="name" value={`Relationship with ${data.relationshipInvite.invitername}`} required/>
+  </div>
+  <div>
+    <label for="myname">Your Name</label>
+    <input id="myname" name="myname" value={'My Name'} required/>
+  </div>
   <button type="submit">Accept</button>
 </form>
 {/if}

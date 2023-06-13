@@ -4,7 +4,7 @@ import {
   createUserRelationship,
   createRelationshipInvite
 } from '$lib/storage';
-import { error, fail, redirect } from '@sveltejs/kit';
+import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 
 export const load = async ({ parent }: PageServerLoadEvent) => {
 
@@ -39,7 +39,11 @@ export const actions = {
       if (!name) {
         throw new Error("Name is required")
       }
-      return await createUserRelationship(session.user?.email, name)
+      const myname = data.get('myname') as string;
+      if (!name) {
+        throw new Error("Name is required")
+      }
+      return await createUserRelationship(session.user?.email, name, myname)
 		} catch (error: any) {
 			return fail(422, {
 				error: error.message
@@ -74,4 +78,4 @@ export const actions = {
 			});
 		}
 	}
-};
+} satisfies Actions;
