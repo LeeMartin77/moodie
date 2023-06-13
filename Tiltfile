@@ -23,7 +23,7 @@ docker_build('ghcr.io/leemartin77/moodie', '.')
 
 # Watch: tell Tilt how to connect locally (optional)
 
-k8s_resource('cassandra', port_forwards="9145:9042", labels=["services"])
+k8s_resource('cassandra', port_forwards="9143:9042", labels=["services"])
 
 k8s_resource('moodie', port_forwards="4025:3000", labels=["application"],  resource_deps=['cassandra'],
   auto_init=True,
@@ -33,7 +33,7 @@ local_resource('moodie local',
   serve_cmd='npm run dev',
   links=["http://localhost:5173"],
   serve_env={
-    'CASSANDRA_CONTACT_POINTS': "localhost:9145",
+    'CASSANDRA_CONTACT_POINTS': "localhost:9143",
     'CASSANDRA_USER':'cassandra',
     'CASSANDRA_PASSWORD':'cassandra',
   },

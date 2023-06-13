@@ -1,20 +1,20 @@
 import { CASSANDRA_CLIENT } from './config';
 
 const MIGRATIONS = [
-  `CREATE KEYSPACE IF NOT EXISTS moodie WITH REPLICATION = {'class':'SimpleStrategy','replication_factor':1};`,
-  `CREATE TABLE IF NOT EXISTS moodie.mood (
+  ['00001', `CREATE KEYSPACE IF NOT EXISTS moodie WITH REPLICATION = {'class':'SimpleStrategy','replication_factor':1};`],
+  ['00002', `CREATE TABLE IF NOT EXISTS moodie.mood (
     id text PRIMARY KEY,
     name text,
     positive boolean,
     negative boolean
-  )`,
-  `CREATE TABLE IF NOT EXISTS moodie.need (
+  )`],
+  ['00003', `CREATE TABLE IF NOT EXISTS moodie.need (
     id text PRIMARY KEY,
     name text,
     active boolean,
     passive boolean
-  )`,
-  `CREATE TABLE IF NOT EXISTS moodie.relationship_invite (
+  )`],
+  ['00004', `CREATE TABLE IF NOT EXISTS moodie.relationship_invite (
     id text PRIMARY KEY,
     relationshipid text,
     inviterid text,
@@ -22,14 +22,14 @@ const MIGRATIONS = [
     redeemed boolean,
     redeemedtime timestamp,
     redeemedbyuserid text
-  )`,
-  `CREATE TABLE IF NOT EXISTS moodie.user_relationship (
+  )`],
+  ['00005', `CREATE TABLE IF NOT EXISTS moodie.user_relationship (
     userid text,
     relationshipid text,
     name text,
     PRIMARY KEY ((userid), relationshipid)
-  )`,
-  `CREATE TABLE IF NOT EXISTS moodie.relationship_mood_log (
+  )`],
+  ['00006', `CREATE TABLE IF NOT EXISTS moodie.relationship_mood_log (
     relationshipid text,
     userid text,
     partnername text,
@@ -44,8 +44,8 @@ const MIGRATIONS = [
     passive boolean,
     time timestamp,
     PRIMARY KEY ((relationshipid), userid)
-  )`,
-  `CREATE TABLE IF NOT EXISTS moodie.relationship_mood_log_history (
+  )`],
+  ['00007', `CREATE TABLE IF NOT EXISTS moodie.relationship_mood_log_history (
     relationshipid text,
     userid text,
     time timestamp,
@@ -60,8 +60,8 @@ const MIGRATIONS = [
     active boolean,
     passive boolean,
     PRIMARY KEY ((relationshipid), userid, time)
-  )`,
-  `CREATE INDEX IF NOT EXISTS ON moodie.relationship_mood_log (time);`,
+  )`],
+  ['00008', `CREATE INDEX IF NOT EXISTS ON moodie.relationship_mood_log (time);`],
 ]
 
 const MOOD_SEED_VALUES = [
@@ -82,8 +82,14 @@ const SEEDS: [string, any[]][] = [
 ]
 
 export const runMigrations = async () => {
-  for (const migration of MIGRATIONS) {
-    await CASSANDRA_CLIENT.execute(migration);
+  await CASSANDRA_CLIENT.execute(`CREATE TABLE IF NOT EXISTS moodie.migrations (key text PRIMARY KEY)`)
+  for (const [key, migration] of MIGRATIONS) {
+    const res = await CASSANDRA_CLIENT.execute(`SELECT key FROM moodie.migrations WHERE key = ?`, [key], { prepare: true });
+    if (res.rows.length === 0) {
+      console.log("Running migration: ", key);
+      await CASSANDRA_CLIENT.execute(migration);
+      await CASSANDRA_CLIENT.execute(`INSERT INTO moodie.migrations (key) VALUES (?)`, [key], { prepare: true })
+    }
   }
   for (const [seedCommand, seedEntries] of SEEDS) {
     for (const seedEntry of seedEntries)
