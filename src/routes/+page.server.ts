@@ -23,7 +23,9 @@ export const load = async ({ parent }: PageServerLoadEvent) => {
   const moods = await getAllMoods();
   const needs = await getAllNeeds();
   const userRelationships = await getUserRelationships(userId);
-  const relationshipMoodLogs = await getLatestRelationshipMoodLogs(userRelationships.map(x => x.relationshipid))
+  const relationshipMoodLogs = userRelationships.length > 0 ? 
+    await getLatestRelationshipMoodLogs(userRelationships.map(x => x.relationshipid)) :
+    [];
 
   return {
     moods,
