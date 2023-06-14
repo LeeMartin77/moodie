@@ -1,5 +1,6 @@
 <script lang="ts">
-  import type { ActionData, PageData } from './$types';
+  import MoodSummary from '$components/MoodSummary.svelte';
+import type { ActionData, PageData } from './$types';
   import { formatRelative } from 'date-fns'
 
   export let data: PageData;
@@ -15,19 +16,7 @@
 {#each data.userRelationships as relationship}
   <h2>{relationship.name}</h2>
   {#each data.relationshipMoodLogs.filter(x => x.relationshipid === relationship.relationshipid) as moodLog}
-    <div>
-      <h3>{moodLog.partnername} {#if moodLog.userid === data.userId}(me){/if}</h3>
-      <h5>{formatRelative(moodLog.time, new Date())}</h5>
-      <dl>
-        <dt>Feeling</dt>
-        <dd>{moodLog.feeling}</dd>
-        <dt>Mood</dt>
-        <dd>{moodLog.mood}</dd>
-        <dt>Need</dt>
-        <dd>{moodLog.need}</dd>
-      </dl>
-
-    </div>
+    <MoodSummary moodLog={moodLog} isMe={moodLog.userid === data.userId}/>
   {/each}
   <h4>Update your mood for {relationship.name}</h4>
   <form method="POST" action="?/addlog">
