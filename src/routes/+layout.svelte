@@ -1,7 +1,7 @@
 <script lang="ts">
 </script>
-<div>
-  <a href="/">Home</a>
+<div class="navigation">
+  <a href="/">Moods</a>
   <a href="/relationships">Relationships</a>
 </div>
 <div class="content-container">
@@ -15,5 +15,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+
+  .navigation {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2em;
+  }
+  .navigation a {
+    text-decoration: none;
+    padding: 0.5em 1em;
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 0.5em;
+  }
+  .navigation a:visited {
+    color: inherit;
   }
 </style>

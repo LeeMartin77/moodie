@@ -25,6 +25,9 @@ import type { ActionData, PageData } from './$types';
 {/each}
 
 <style>
+  h1 {
+    text-align: center;
+  }
   .relationship-container {
     display: flex;
     flex-direction: column;
@@ -33,5 +36,6 @@ import type { ActionData, PageData } from './$types';
   .relationship-container h2 {
     margin: 0;
     margin-bottom: -0.5em;
+    text-align: center;
   }
 </style>
