@@ -12,7 +12,7 @@
   <dl>
     <div>
       <dt>Feeling</dt>
-      <dd>{moodLog.feeling}</dd>
+      <dd>{moodLog.feeling}/5</dd>
     </div>
     <div>
       <dt>Mood</dt>
@@ -28,9 +28,10 @@
 <style>
   .log-container {
     position: relative;
-    background-color: #EFEFEF;
+    background-color: white;
     padding: 1em;
     border-radius: 1em;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
   }
   .log-container h3 {
     margin: 0.25em 0 0.5em 0;
