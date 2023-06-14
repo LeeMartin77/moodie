@@ -14,6 +14,22 @@
 
 {#each data.relationships as relationship}
   <h3>{relationship.name}</h3>
+  <form method="POST" action="?/update">
+    <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
+    <div>
+      <label for="name">Relationship Name</label>
+      <input id="name" name="name" value={relationship.name} required/>
+    </div>
+    <div>
+      <label for="myname">Your Name</label>
+      <input id="myname" name="myname" value={relationship.myname} required/>
+    </div>
+    <button type="submit">Update</button>
+  </form>
+  <form method="POST" action="?/leave">
+    <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
+    <button type="submit">Leave</button>
+  </form>
   {#if form?.relationshipid && form?.id && form.relationshipid === relationship.relationshipid}
     <a href={`/relationships/join?inviteid=${form.id}`}>Your invite link</a>
   {/if}

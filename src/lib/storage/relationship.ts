@@ -29,6 +29,13 @@ export const createUserRelationship = async (userid: string, name: string, mynam
   };
 }
 
+export const removeUserRelationship = async (userid: string, relationshipid: string): Promise<void> => {
+  await CASSANDRA_CLIENT.execute(
+    'DELETE FROM moodie.user_relationship WHERE userid = ? and relationshipid = ?',
+    [userid, relationshipid],
+    { prepare: true }
+  );
+}
 
 export const createRelationshipInvite = async (inviterid: string, relationshipid: string, invitername: string): Promise<RelationshipInvite> => {
   const id = randomUUID();
