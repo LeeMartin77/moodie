@@ -1,9 +1,7 @@
 <script lang="ts">
-	import type { Mood, Need, UserRelationship } from "$lib/storage";
+	import type { UserRelationship } from "$lib/storage";
 
   export let relationship: UserRelationship
-  export let moods: Mood[]
-  export let needs: Need[]
 </script>
 
 <div class="submit-container">
@@ -19,7 +17,7 @@
     <div class="form-group">
       <label for="moodid">Mood</label>
       <select id="moodid" name="moodid" required>
-        {#each moods as mood}
+        {#each relationship.moods as mood}
           <option value={mood.id}>{mood.name}</option>
         {/each}
       </select>
@@ -27,7 +25,7 @@
     <div class="form-group">
       <label for="needid">Need</label>
       <select id="needid" name="needid" required>
-        {#each needs as need}
+        {#each relationship.needs as need}
           <option value={need.id}>{need.name}</option>
         {/each}
       </select>

@@ -1,8 +1,7 @@
 <script lang="ts">
   import MoodLogCreator from '$components/MoodLogCreator.svelte';
-import MoodSummary from '$components/MoodSummary.svelte';
-import type { ActionData, PageData } from './$types';
-  import { formatRelative } from 'date-fns'
+  import MoodSummary from '$components/MoodSummary.svelte';
+  import type { ActionData, PageData } from './$types';
 
   export let data: PageData;
   export let form: ActionData;
@@ -20,7 +19,7 @@ import type { ActionData, PageData } from './$types';
     {#each data.relationshipMoodLogs.filter(x => x.relationshipid === relationship.relationshipid) as moodLog}
       <MoodSummary moodLog={moodLog} isMe={moodLog.userid === data.userId}/>
     {/each}
-    <MoodLogCreator relationship={relationship} moods={data.moods} needs={data.needs}/>
+    <MoodLogCreator relationship={relationship} />
   </div>
 {/each}
 

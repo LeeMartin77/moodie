@@ -31,7 +31,9 @@ export type UserRelationship = {
   userid: string,
   relationshipid: string,
   name: string,
-  myname: string
+  myname: string,
+  moods: Mood[],
+  needs: Need[],
 }
 
 export type RelationshipMoodLog = {

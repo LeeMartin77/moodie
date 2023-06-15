@@ -1,6 +1,8 @@
 import type { PageServerLoadEvent } from './$types';
 import {
   createUserRelationship,
+  getAllDefaultMoods,
+  getAllDefaultNeeds,
   getRelationshipInvite,
   redeemRelationshipInvite,
 } from '$lib/storage';
@@ -55,7 +57,9 @@ export const actions = {
         throw redirect(302, '/relationships');
       }
 
-      await createUserRelationship(userid, name, myname, relationshipInvite.relationshipid)
+      const [defaultNeeds, defaultMoods] = await Promise.all([getAllDefaultNeeds(),getAllDefaultMoods()])
+
+      await createUserRelationship(userid, name, myname, defaultMoods, defaultNeeds, relationshipInvite.relationshipid)
       await redeemRelationshipInvite(inviteid, userid);
       throw redirect(302, '/relationships');
 		} catch (error: any) {

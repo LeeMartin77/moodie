@@ -1,7 +1,5 @@
 import type { PageServerLoadEvent } from './$types';
 import {
-  getAllMoods,
-  getAllNeeds,
   getUserRelationships,
   getLatestRelationshipMoodLogs,
   insertRelationshipMoodLog
@@ -20,8 +18,6 @@ export const load = async ({ parent }: PageServerLoadEvent) => {
 
   const userId = session.user.email;
 
-  const moods = await getAllMoods();
-  const needs = await getAllNeeds();
   const userRelationships = await getUserRelationships(userId);
   const relationshipMoodLogs = userRelationships.length > 0 ? 
     await getLatestRelationshipMoodLogs(userRelationships.map(x => x.relationshipid)) :
@@ -29,8 +25,6 @@ export const load = async ({ parent }: PageServerLoadEvent) => {
 
   return {
     userId,
-    moods,
-    needs,
     userRelationships,
     relationshipMoodLogs
   };
@@ -55,7 +49,8 @@ export const actions = {
       const [relationshipid, partnername, feeling, moodid, needid] = neededData as string[];
 
       const userRelationships = await getUserRelationships(userid);
-      if (!userRelationships.map(x => x.relationshipid).includes(relationshipid)) {
+      const relationship = userRelationships.find(x => x.relationshipid === relationshipid)
+      if (!relationship) {
         throw new Error("Invalid relationshipid")
       }
 
@@ -65,10 +60,8 @@ export const actions = {
         throw new Error("Invalid feeling")
       }
 
-      const [moods, needs] = await Promise.all([getAllMoods(), getAllNeeds()]);
-
-      const mood = moods.find(x => x.id === moodid);
-      const need = needs.find(x => x.id === needid);
+      const mood = Array.from(relationship.moods).find(x => x.id === moodid);
+      const need = Array.from(relationship.needs).find(x => x.id === needid);
 
       if (!mood) {
         throw new Error("Invalid moodid")

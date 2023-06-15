@@ -1,5 +1,5 @@
 import { CASSANDRA_CLIENT } from './config'
-import type { RelationshipInvite, UserRelationship } from './types';
+import type { Mood, Need, RelationshipInvite, UserRelationship } from './types';
 import { rowToObject } from './utility'
 import { randomUUID } from 'node:crypto';
 
@@ -15,18 +15,48 @@ export const getUserRelationships = async (userid: string) => {
 }
 
 
-export const createUserRelationship = async (userid: string, name: string, myname: string, relationshipid: string = randomUUID()): Promise<UserRelationship> => {
+export const createUserRelationship = async (
+  userid: string, 
+  name: string, 
+  myname: string, 
+  moods: Mood[], 
+  needs: Need[], 
+  relationshipid: string = randomUUID()): Promise<UserRelationship> => {
   await CASSANDRA_CLIENT.execute(
-    'INSERT INTO moodie.user_relationship (userid, relationshipid, name, myname) VALUES (?, ?, ?, ?)',
-    [userid, relationshipid, name, myname],
+    `INSERT INTO moodie.user_relationship (
+      userid,
+      relationshipid,
+      name,
+      myname,
+      moods,
+      needs) VALUES (?, ?, ?, ?, ?, ?)`,
+    [userid, relationshipid, name, myname, moods, needs],
     { prepare: true }
   );
   return {
     relationshipid,
     userid,
     name,
-    myname
+    myname,
+    moods,
+    needs
   };
+}
+
+export const updateUserRelationship = async (
+  userid: string, 
+  name: string, 
+  myname: string,
+  relationshipid: string = randomUUID()): Promise<void> => {
+  await CASSANDRA_CLIENT.execute(
+    `INSERT INTO moodie.user_relationship (
+      userid,
+      relationshipid,
+      name,
+      myname) VALUES (?, ?, ?, ?)`,
+    [userid, relationshipid, name, myname],
+    { prepare: true }
+  );
 }
 
 export const removeUserRelationship = async (userid: string, relationshipid: string): Promise<void> => {

@@ -3,7 +3,10 @@ import {
   getUserRelationships,
   createUserRelationship,
   createRelationshipInvite,
-  removeUserRelationship
+  removeUserRelationship,
+  updateUserRelationship,
+  getAllDefaultNeeds,
+  getAllDefaultMoods
 } from '$lib/storage';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 
@@ -44,7 +47,9 @@ export const actions = {
       if (!name) {
         throw new Error("Name is required")
       }
-      return await createUserRelationship(session.user?.email, name, myname)
+      const [defaultNeeds, defaultMoods] = await Promise.all([getAllDefaultNeeds(),getAllDefaultMoods()])
+
+      return await createUserRelationship(session.user?.email, name, myname, defaultMoods, defaultNeeds)
 		} catch (error: any) {
 			return fail(422, {
 				error: error.message
@@ -71,7 +76,7 @@ export const actions = {
       if (!relationshipid) {
         throw new Error("relationshipid is required")
       }
-      return await createUserRelationship(session.user?.email, name, myname, relationshipid)
+      return await updateUserRelationship(session.user?.email, name, myname, relationshipid)
 		} catch (error: any) {
 			return fail(422, {
 				error: error.message
