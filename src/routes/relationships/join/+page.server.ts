@@ -7,6 +7,7 @@ import {
   redeemRelationshipInvite,
 } from '$lib/storage';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { userIdGenerator } from '$lib/userIdGenerator';
 
 export const load = async ({ url, parent }: PageServerLoadEvent) => {
 
@@ -32,10 +33,10 @@ export const load = async ({ url, parent }: PageServerLoadEvent) => {
 export const actions = {
 	accept: async ({ request, locals }) => {
     const session = await locals.getSession();
-    if (!session || !session.user?.email) {
+    if (!session || !session.user) {
       throw redirect(302, '/auth/signin');
     }
-    const userid = session.user?.email;
+    const userid = userIdGenerator(session.user);
 		const data = await request.formData();
 
 		try {

@@ -8,20 +8,15 @@ import {
   getAllDefaultNeeds,
   getAllDefaultMoods
 } from '$lib/storage';
-import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { userIdGenerator } from '$lib/userIdGenerator';
 
 export const load = async ({ parent }: PageServerLoadEvent) => {
 
-  const { session } = await parent();
+  const { session, userId } = await parent();
   if (!session?.user) {
     throw redirect(302, '/');
   }
-
-  if (!session.user?.email) {
-    throw error(500, 'Cannot access user info');
-  }
-
-  const userId = session.user.email;
 
   const relationships = await getUserRelationships(userId);
   return {
@@ -33,7 +28,7 @@ export const load = async ({ parent }: PageServerLoadEvent) => {
 export const actions = {
 	create: async ({ request, locals }) => {
     const session = await locals.getSession();
-    if (!session || !session.user?.email) {
+    if (!session || !session.user) {
       throw redirect(302, '/auth/signin');
     }
 		const data = await request.formData();
@@ -49,7 +44,7 @@ export const actions = {
       }
       const [defaultNeeds, defaultMoods] = await Promise.all([getAllDefaultNeeds(),getAllDefaultMoods()])
 
-      return await createUserRelationship(session.user?.email, name, myname, defaultMoods, defaultNeeds)
+      return await createUserRelationship(userIdGenerator(session.user), name, myname, defaultMoods, defaultNeeds)
 		} catch (error: any) {
 			return fail(422, {
 				error: error.message
@@ -58,7 +53,7 @@ export const actions = {
 	},
 	update: async ({ request, locals }) => {
     const session = await locals.getSession();
-    if (!session || !session.user?.email) {
+    if (!session || !session.user) {
       throw redirect(302, '/auth/signin');
     }
 		const data = await request.formData();
@@ -76,7 +71,7 @@ export const actions = {
       if (!relationshipid) {
         throw new Error("relationshipid is required")
       }
-      return await updateUserRelationship(session.user?.email, name, myname, relationshipid)
+      return await updateUserRelationship(userIdGenerator(session.user), name, myname, relationshipid)
 		} catch (error: any) {
 			return fail(422, {
 				error: error.message
@@ -85,7 +80,7 @@ export const actions = {
 	},
 	leave: async ({ request, locals }) => {
     const session = await locals.getSession();
-    if (!session || !session.user?.email) {
+    if (!session || !session.user) {
       throw redirect(302, '/auth/signin');
     }
 		const data = await request.formData();
@@ -95,7 +90,7 @@ export const actions = {
       if (!relationshipid) {
         throw new Error("relationshipid is required")
       }
-      return await removeUserRelationship(session.user?.email, relationshipid)
+      return await removeUserRelationship(userIdGenerator(session.user), relationshipid)
 		} catch (error: any) {
 			return fail(422, {
 				error: error.message
@@ -104,13 +99,12 @@ export const actions = {
 	},
 	invite: async ({ request, locals }) => {
     const session = await locals.getSession();
-    if (!session || !session.user?.email) {
+    if (!session || !session.user) {
       throw redirect(302, '/auth/signin');
     }
 		const data = await request.formData();
-
-    const userId = session.user.email;
 		try {
+      const userId = userIdGenerator(session.user);
       const name = data.get('invitername') as string;
       const relationshipid = data.get('relationshipid') as string;
       if (!name) {

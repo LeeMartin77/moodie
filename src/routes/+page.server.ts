@@ -5,18 +5,17 @@ import {
   insertRelationshipMoodLog
 } from '$lib/storage';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
+import { userIdGenerator } from '$lib/userIdGenerator';
 
 export const load = async ({ parent }: PageServerLoadEvent) => {
-  const { session } = await parent();
+  const { session, userId } = await parent();
   if (!session?.user) {
     throw redirect(302, '/');
   }
 
-  if (!session.user?.email) {
+  if (!userId) {
     throw error(500, 'Cannot access user info');
   }
-
-  const userId = session.user.email;
 
   const userRelationships = await getUserRelationships(userId);
   const relationshipMoodLogs = userRelationships.length > 0 ? 
@@ -33,10 +32,10 @@ export const load = async ({ parent }: PageServerLoadEvent) => {
 export const actions = {
   addlog: async ({ request, locals }) => {
     const session = await locals.getSession();
-    if (!session || !session.user?.email) {
+    if (!session || !session.user) {
       throw redirect(302, '/auth/signin');
     }
-    const userid = session.user?.email;
+    const userid = userIdGenerator(session.user);
 		const data = await request.formData();
     const fields = ["relationshipid", "partnername", "feeling", "moodid", "needid"];
     const neededData = fields.map(x => {
