@@ -96,15 +96,52 @@ const MIGRATIONS = [
   )`],
 ]
 
+// type id name positive negative
 const MOOD_SEED_VALUES = [
+  ['romantic', 'content', 'Content', true, false],
+  ['romantic', 'excited', 'Excited', true, false],
+  ['romantic', 'passionate', 'Passionate', true, false],
+  ['romantic', 'affectionate', 'Affectionate', true, false],
   ['romantic', 'flirty', 'Flirty', true, false],
+  ['romantic', 'happy', 'Happy', true, false],
+  ['romantic', 'connected', 'Connected', true, false],
+  ['romantic', 'fulfilled', 'Fulfilled', true, false],
+  ['romantic', 'calm', 'Calm', true, false],
+  ['romantic', 'quiet', 'Quiet', false, false],
+  ['romantic', 'focused', 'Focused', false, false],
   ['romantic', 'sad', 'Sad', false, true],
-  ['romantic', 'passive', 'Passive', false, false],
+  ['romantic', 'frustrated', 'Frustrated', false, true],
+  ['romantic', 'disappointed', 'Disappointed', false, true],
+  ['romantic', 'jealous', 'Jealous', false, true],
+  ['romantic', 'insecure', 'Insecure', false, true],
+  ['romantic', 'confused', 'Confused', false, true],
+  ['romantic', 'resentful', 'Resentful', false, true],
+  ['romantic', 'hurt', 'Hurt', false, true],
+  ['romantic', 'lonely', 'Lonely', false, true],
+  ['romantic', 'unfulfilled', 'Unfulfilled', false, true],
 ]
 
+// type id name active passive
 const NEED_SEED_VALUES = [
+  ['romantic', 'emotional_support', 'Emotional Support', true, false],
+  ['romantic', 'talking_time', 'Talking Time', true, false],
+  ['romantic', 'physical_touch', 'Physical Touch', true, false],
+  ['romantic', 'sex_and_desire', 'Sex and Desire', true, false],
+  ['romantic', 'do_something_together', 'Do Something Together', true, false],
+  ['romantic', 'decisions_made', 'Decisions Made For Me', true, false],
+  ['romantic', 'affection', 'Affection', true, false],
   ['romantic', 'attention', 'Attention', true, false],
-  ['romantic', 'solitude', 'Time to Myself', false, true]
+  ['romantic', 'encouragement', 'Encouragement', true, false],
+
+
+  ['romantic', 'stability', 'Stability', false, true],
+  ['romantic', 'time_alone', 'Time Alone', false, true],
+  ['romantic', 'quiet_time_together', 'Quiet Time Together', false, true],
+  ['romantic', 'empath', 'Empath', false, true],
+  ['romantic', 'comfort', 'Comfort', false, true],
+  ['romantic', 'solace', 'Solace', false, true],
+  ['romantic', 'routine', 'Routine', false, true],
+  ['romantic', 'appreciation', 'Appreciation', false, true],
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
