@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { RelationshipInvite } from '$lib/storage';
+	import RelationshipEditor from '$components/RelationshipEditor.svelte';
+  import type { RelationshipInvite } from '$lib/storage';
   import type { ActionData, PageData } from './$types';
 
   export let data: PageData;
@@ -13,31 +14,7 @@
 {/if}
 
 {#each data.relationships as relationship}
-  <h3>{relationship.name}</h3>
-  <form method="POST" action="?/update">
-    <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
-    <div>
-      <label for="name">Relationship Name</label>
-      <input id="name" name="name" value={relationship.name} required/>
-    </div>
-    <div>
-      <label for="myname">Your Name</label>
-      <input id="myname" name="myname" value={relationship.myname} required/>
-    </div>
-    <button type="submit">Update</button>
-  </form>
-  <form method="POST" action="?/leave">
-    <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
-    <button type="submit">Leave</button>
-  </form>
-  {#if form?.relationshipid && form?.id && form.relationshipid === relationship.relationshipid}
-    <a href={`/relationships/join?inviteid=${form.id}`}>Your invite link</a>
-  {/if}
-  <form method="POST" action="?/invite">
-    <input type="hidden" name="invitername" value={relationship.myname}/>
-    <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
-    <button type="submit">Generate invite</button>
-  </form>
+  <RelationshipEditor relationship={relationship} form={form} />
 {/each}
 {#if data.relationships.length === 0}
   <h3>You currently have no moodie relationships</h3>
