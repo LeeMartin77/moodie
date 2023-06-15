@@ -1,5 +1,6 @@
 <script lang="ts">
-	import RelationshipEditor from '$components/RelationshipEditor.svelte';
+	import RelationshipCreator from '$components/RelationshipCreator.svelte';
+  import RelationshipEditor from '$components/RelationshipEditor.svelte';
   import type { RelationshipInvite } from '$lib/storage';
   import type { ActionData, PageData } from './$types';
 
@@ -12,23 +13,21 @@
 {#if form?.error}
   <p class="error">{form.error}</p>
 {/if}
+<div class="relationship-container">
+  {#each data.relationships as relationship}
+    <RelationshipEditor relationship={relationship} form={form} />
+  {/each}
+  {#if data.relationships.length === 0}
+    <h3>You currently have no moodie relationships</h3>
+  {/if}
+</div>
 
-{#each data.relationships as relationship}
-  <RelationshipEditor relationship={relationship} form={form} />
-{/each}
-{#if data.relationships.length === 0}
-  <h3>You currently have no moodie relationships</h3>
-{/if}
+<RelationshipCreator />
 
-<h2>Create a new Relationship</h2>
-<form method="POST" action="?/create">
-  <div>
-    <label for="name">Relationship Name</label>
-    <input id="name" name="name" required/>
-  </div>
-  <div>
-    <label for="myname">Your Name</label>
-    <input id="myname" name="myname" required/>
-  </div>
-  <button type="submit">Create New</button>
-</form>
+<style>
+.relationship-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+</style>
