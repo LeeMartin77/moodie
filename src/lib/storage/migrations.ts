@@ -61,24 +61,56 @@ const MIGRATIONS = [
     PRIMARY KEY ((relationshipid), userid, time)
   )`],
   ['00008', `CREATE INDEX IF NOT EXISTS ON moodie.relationship_mood_log (time);`],
-  ['00009', `ALTER TABLE moodie.user_relationship ADD (myname text)`]
+  ['00009', `ALTER TABLE moodie.user_relationship ADD (myname text)`],
+  ['00010', `CREATE TABLE IF NOT EXISTS moodie.default_mood (
+    relationshiptype text,
+    id text,
+    name text,
+    positive boolean,
+    negative boolean,
+    PRIMARY KEY ((relationshiptype), id)
+  )`],
+  ['00011', `CREATE TABLE IF NOT EXISTS moodie.default_need (
+    relationshiptype text,
+    id text,
+    name text,
+    active boolean,
+    passive boolean,
+    PRIMARY KEY ((relationshiptype), id)
+  )`],
+  ['00012', `CREATE TYPE IF NOT EXISTS moodie.mood (
+    id text,
+    name text,
+    active boolean,
+    passive boolean
+  )`],
+  ['00013', `CREATE TYPE IF NOT EXISTS moodie.need (
+    id text,
+    name text,
+    active boolean,
+    passive boolean
+  )`],
+  ['00014', `ALTER TABLE moodie.user_relationship ADD (
+      moods set<frozen<moodie.mood>>,
+      needs set<frozen<moodie.need>>
+  )`],
 ]
 
 const MOOD_SEED_VALUES = [
-  ['flirty', 'Flirty', true, false],
-  ['sad', 'Sad', false, true],
-  ['passive', 'Passive', false, false],
+  ['romantic', 'flirty', 'Flirty', true, false],
+  ['romantic', 'sad', 'Sad', false, true],
+  ['romantic', 'passive', 'Passive', false, false],
 ]
 
 const NEED_SEED_VALUES = [
-  ['attention', 'Attention', true, false],
-  ['solitude', 'Time to Myself', false, true]
+  ['romantic', 'attention', 'Attention', true, false],
+  ['romantic', 'solitude', 'Time to Myself', false, true]
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const SEEDS: [string, any[]][] = [
-  ['INSERT INTO moodie.mood (id, name, positive, negative)', MOOD_SEED_VALUES],
-  ['INSERT INTO moodie.need (id, name, active, passive)', NEED_SEED_VALUES]
+  ['INSERT INTO moodie.default_mood (relationshiptype, id, name, positive, negative)', MOOD_SEED_VALUES],
+  ['INSERT INTO moodie.default_need (relationshiptype, id, name, active, passive)', NEED_SEED_VALUES]
 ]
 
 export const runMigrations = async () => {
