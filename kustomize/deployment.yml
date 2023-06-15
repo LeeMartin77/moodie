@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: moodie
-          image: ghcr.io/leemartin77/moodie:72da7fbe8f858725e091741970612f55c263f5d7
+          image: ghcr.io/leemartin77/moodie:5503ad4c25981165b97c2289c7609e4fe71769e4
           imagePullPolicy: IfNotPresent
           resources:
             limits:
