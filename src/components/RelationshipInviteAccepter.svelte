@@ -1,19 +1,26 @@
-<h2>Create a new Relationship</h2>
-<div class="creator-container">
-  <form method="POST" action="?/create">
+<script lang="ts">
+	import type { RelationshipInvite } from "$lib/storage";
+
+  export let relationshipInvite: RelationshipInvite
+</script>
+
+<h2>Join a Relationship</h2>
+<div class="join-container">
+  <form method="POST" action="?/accept">
+    <input type="hidden" name="inviteid" value={relationshipInvite.id}/>
     <div class="form-group">
       <label for="name">Relationship Name</label>
-      <input id="name" name="name" required/>
+      <input id="name" name="name" value={`Relationship with ${relationshipInvite.invitername}`} required/>
     </div>
     <div class="form-group">
       <label for="myname">Your Name</label>
-      <input id="myname" name="myname" required/>
+      <input id="myname" name="myname" value={'My Name'} required/>
     </div>
-    <button type="submit">Create New</button>
+    <button type="submit">Accept</button>
   </form>
 </div>
 <style>  
-  .creator-container {
+  .join-container {
     position: relative;
     background-color: rgba(0,0,0,0.01);
     padding: 1em;
