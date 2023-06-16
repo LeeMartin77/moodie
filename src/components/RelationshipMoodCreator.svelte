@@ -1,11 +1,20 @@
 <script lang="ts">
-	import type { UserRelationship } from "$lib/storage";
-
+	import type { Mood, UserRelationship } from "$lib/storage";
+  import { createEventDispatcher } from 'svelte';
+  
   export let relationship: UserRelationship
+
+	const dispatch = createEventDispatcher();
 
   let name: string | undefined;
   let sentiment: string | undefined;
   let error: string | undefined;
+
+  function sendNewMood(mood: Mood) {
+		dispatch('newmood', {
+			mood
+		});
+	}
 </script>
 
 <button on:click={() => {
@@ -34,7 +43,8 @@
       }).then(res => res.json())
         .then(mood => {
           // @ts-ignore
-          document.getElementById("createMoodDialog").close(mood)
+          document.getElementById("createMoodDialog").close()
+          sendNewMood(mood)
         }).catch(err => {
           error = err;
         })

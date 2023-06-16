@@ -1,12 +1,17 @@
 <script lang="ts">
-	import type { UserRelationship } from "$lib/storage";
+	import type { Mood, UserRelationship } from "$lib/storage";
 	import RelationshipMoodCreator from "./RelationshipMoodCreator.svelte";
 
   export let relationship: UserRelationship
+
+  const handleNewMood = (disp: CustomEvent<{ mood: Mood }>) => {
+    relationship.moods = [disp.detail.mood, ...relationship.moods]
+    relationship = relationship
+  }
 </script>
 <div class="relationship-container">
   <h3>Moods</h3>
-  <RelationshipMoodCreator relationship={relationship} />
+  <RelationshipMoodCreator relationship={relationship} on:newmood={handleNewMood} />
   {#each relationship.moods as mood}
     
   <form method="POST" action="?/deleteMood">
