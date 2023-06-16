@@ -133,11 +133,11 @@ const NEED_SEED_VALUES = [
   ['romantic', 'attention', 'Attention', true, false],
   ['romantic', 'encouragement', 'Encouragement', true, false],
 
-
+  ['romantic', 'nothing', 'Nothing', false, true],
   ['romantic', 'stability', 'Stability', false, true],
   ['romantic', 'time_alone', 'Time Alone', false, true],
   ['romantic', 'quiet_time_together', 'Quiet Time Together', false, true],
-  ['romantic', 'empath', 'Empath', false, true],
+  ['romantic', 'empathy', 'Empathy', false, true],
   ['romantic', 'comfort', 'Comfort', false, true],
   ['romantic', 'solace', 'Solace', false, true],
   ['romantic', 'routine', 'Routine', false, true],
