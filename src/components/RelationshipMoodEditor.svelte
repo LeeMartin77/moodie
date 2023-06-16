@@ -1,10 +1,12 @@
 <script lang="ts">
 	import type { UserRelationship } from "$lib/storage";
+	import RelationshipMoodCreator from "./RelationshipMoodCreator.svelte";
 
   export let relationship: UserRelationship
 </script>
 <div class="relationship-container">
   <h3>Moods</h3>
+  <RelationshipMoodCreator relationship={relationship} />
   {#each relationship.moods as mood}
     
   <form method="POST" action="?/deleteMood">

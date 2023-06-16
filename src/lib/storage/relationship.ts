@@ -72,6 +72,17 @@ export const updateUserRelationship = async (
   );
 }
 
+export const addUserRelationshipMood = async (
+  userid: string,
+  relationshipid: string,
+  mood: Mood): Promise<void> => {
+  await CASSANDRA_CLIENT.execute(
+    `UPDATE moodie.user_relationship SET moods = moods + ? WHERE userid = ? and relationshipid = ?;`,
+    [[mood], userid, relationshipid],
+    { prepare: true }
+  );
+}
+
 export const deleteUserRelationshipMood = async (
   userid: string,
   relationshipid: string,
