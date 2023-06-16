@@ -1,6 +1,7 @@
 <script lang="ts">
 	import RelationshipCreator from '$components/RelationshipCreator.svelte';
   import RelationshipEditor from '$components/RelationshipEditor.svelte';
+	import RelationshipSummary from '$components/RelationshipSummary.svelte';
   import type { RelationshipInvite } from '$lib/storage';
   import type { ActionData, PageData } from './$types';
 
@@ -15,7 +16,7 @@
 {/if}
 <div class="relationship-container">
   {#each data.relationships as relationship}
-    <RelationshipEditor relationship={relationship} form={form} />
+    <RelationshipSummary relationship={relationship} form={form} />
   {/each}
   {#if data.relationships.length === 0}
     <h3>You currently have no moodie relationships</h3>
