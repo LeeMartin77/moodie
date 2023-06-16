@@ -15,6 +15,19 @@ export const getUserRelationships = async (userid: string) => {
 }
 
 
+export const getUserRelationship = async (userid: string, relationshipid: string) => {
+  const result = await CASSANDRA_CLIENT.execute(
+    'SELECT * FROM moodie.user_relationship WHERE userid = ? and relationshipid = ?;',
+    [userid, relationshipid],
+    { prepare: true }
+  );
+  const res = result.first();
+  if (!res) {
+    return undefined;
+  }
+  return rowToObject<UserRelationship>(res);
+}
+
 export const createUserRelationship = async (
   userid: string, 
   name: string, 

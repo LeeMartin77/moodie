@@ -16,6 +16,8 @@
     <button type="submit">Generate invite</button>
   </form>
   <hr />
+  <a class="edit-link" href={`/relationships/${relationship.relationshipid}`}>Edit</a>
+  <hr />
   <button on:click={() => {
       // @ts-ignore
       document.getElementById("leaveDialog").showModal()
@@ -65,6 +67,23 @@ button {
   font-weight: 700;
   margin-top: 1em;
   width: 100%;
+  font-size: 14px;
+}
+.edit-link {
+  display: block;
+  margin-top: 1em;
+  border-radius: 0.5em;
+  padding: 1em;
+  font-weight: 700;
+  background-color: #e9e9ed;
+  text-align: center;
+  text-decoration: none;
+  color: initial;
+  font-size: 14px;
+}
+.edit-link:visited {
+
+  color: initial;
 }
 .cancel-button {
   border: 1px solid black;

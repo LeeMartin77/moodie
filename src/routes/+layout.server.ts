@@ -1,6 +1,9 @@
 import { redirect } from '@sveltejs/kit';
 import type { LayoutServerLoad } from './$types';
 import { userIdGenerator } from '$lib/userIdGenerator';
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export const load: LayoutServerLoad = async (event) => {
   const session = await event.locals.getSession();
   if ((!session || !session.user?.email)
