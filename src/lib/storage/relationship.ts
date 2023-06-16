@@ -60,7 +60,7 @@ export const updateUserRelationship = async (
   userid: string, 
   name: string, 
   myname: string,
-  relationshipid: string = randomUUID()): Promise<void> => {
+  relationshipid: string): Promise<void> => {
   await CASSANDRA_CLIENT.execute(
     `INSERT INTO moodie.user_relationship (
       userid,
@@ -68,6 +68,29 @@ export const updateUserRelationship = async (
       name,
       myname) VALUES (?, ?, ?, ?)`,
     [userid, relationshipid, name, myname],
+    { prepare: true }
+  );
+}
+
+export const deleteUserRelationshipMood = async (
+  userid: string,
+  relationshipid: string,
+  mood: Mood): Promise<void> => {
+  await CASSANDRA_CLIENT.execute(
+    `DELETE moods[?] FROM moodie.user_relationship WHERE userid = ? and relationshipid = ?;`,
+    [mood, userid, relationshipid],
+    { prepare: true }
+  );
+}
+
+
+export const deleteUserRelationshipNeed = async (
+  userid: string,
+  relationshipid: string,
+  need: Need): Promise<void> => {
+  await CASSANDRA_CLIENT.execute(
+    `DELETE needs[?] FROM moodie.user_relationship WHERE userid = ? and relationshipid = ?;`,
+    [need, userid, relationshipid],
     { prepare: true }
   );
 }
