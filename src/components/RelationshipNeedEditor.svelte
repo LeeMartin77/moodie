@@ -1,10 +1,17 @@
 <script lang="ts">
-	import type { UserRelationship } from "$lib/storage";
+	import type { Need, UserRelationship } from "$lib/storage";
+	import RelationshipNeedCreator from "./RelationshipNeedCreator.svelte";
 
   export let relationship: UserRelationship
+
+  const handleNewNeed = (disp: CustomEvent<{ need: Need }>) => {
+    relationship.needs = [disp.detail.need, ...relationship.needs]
+    relationship = relationship
+  }
 </script>
 <div class="relationship-container">
   <h3>Needs</h3>
+  <RelationshipNeedCreator relationship={relationship} on:newneed={handleNewNeed} />
   {#each relationship.needs as need}
     
   <form method="POST" action="?/deleteNeed">
