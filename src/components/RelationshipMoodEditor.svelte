@@ -4,9 +4,27 @@
 
   export let relationship: UserRelationship
 
+  let busy = false;
   const handleNewMood = (disp: CustomEvent<{ mood: Mood }>) => {
     relationship.moods = [disp.detail.mood, ...relationship.moods]
     relationship = relationship
+  }
+  const deleteMood = (mood: Mood, index: number) => {
+    busy = true;
+    fetch(`/api/relationships/${relationship.relationshipid}/moods`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(mood)
+      }).then(res => {
+        if (res.status === 200) {
+          relationship.moods.splice(index, 1)
+          relationship = relationship;
+        }
+      }).finally(() => {
+        busy = false;
+      })
   }
 </script>
 <div class="relationship-container">
@@ -14,15 +32,11 @@
   <RelationshipMoodCreator relationship={relationship} on:newmood={handleNewMood} />
   <hr />
   <div class="mood-list">
-    {#each relationship.moods as mood}
-    <form method="POST" action="?/deleteMood">
-      <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
-      <input type="hidden" name="moodid" value={mood.id}/>
-      <div class="mood-row">
-        <div>{mood.name}</div>
-        <button type="submit">Delete</button>
-      </div>
-    </form>
+    {#each relationship.moods as mood, i}
+    <div class="mood-row">
+      <div>{mood.name}</div>
+      <button type="submit" disabled={busy} on:click={() => deleteMood(mood, i)}>Delete</button>
+    </div>
     {/each}
   </div>
 </div>
@@ -68,5 +82,9 @@ hr {
   border-radius: 0.5em;
   font-weight: 700;
   border: none;
+}
+.mood-row button:disabled {
+  background-color: rgba(0,0,0,0.1);
+  color: rgba(0,0,0,0.2);
 }
 </style>
