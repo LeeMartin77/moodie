@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { RelationshipMoodLog } from "$lib/storage";
 	import { formatRelative } from "date-fns";
+	import MoodFeelingIndicator from "./MoodFeelingIndicator.svelte";
 
   export let moodLog: RelationshipMoodLog
   export let isMe: boolean
@@ -12,7 +13,7 @@
   <dl>
     <div>
       <dt>Feeling</dt>
-      <dd>{moodLog.feeling}/5</dd>
+      <dd style={'margin-top: 0.2em'}><MoodFeelingIndicator feeling={moodLog.feeling}/></dd>
     </div>
     <div>
       <dt>Mood</dt>

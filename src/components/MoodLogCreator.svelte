@@ -1,7 +1,10 @@
 <script lang="ts">
 	import type { UserRelationship } from "$lib/storage";
+	import MoodFeelingIndicator from "./MoodFeelingIndicator.svelte";
 
   export let relationship: UserRelationship
+
+  let feeling = 3;
 </script>
 
 <div class="submit-container">
@@ -11,8 +14,11 @@
     <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
     <input type="hidden" name="partnername" value={relationship.myname}/>
     <div class="form-group">
-      <label for="feeling">Feeling</label>
-      <input id="feeling" type="range" name="feeling" min="0" max="5"  value="3" required/>
+      <div class="feeling-label-with-indicator">
+        <label for="feeling" >Feeling</label>
+        <MoodFeelingIndicator feeling={feeling} />
+      </div>
+      <input id="feeling" type="range" bind:value={feeling} name="feeling" min="0" max="5" required/>
     </div>
     <div class="form-group">
       <label for="moodid">Mood</label>
@@ -40,6 +46,13 @@
     background-color: rgba(0,0,0,0.02);
     padding: 1em;
     border-radius: 1em;
+  }
+
+  .feeling-label-with-indicator {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1em;
   }
   .submit-container h4 {
     margin: 0.25em 0 0.5em 0;
