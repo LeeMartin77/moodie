@@ -12,21 +12,29 @@
 <div class="relationship-container">
   <h3>Moods</h3>
   <RelationshipMoodCreator relationship={relationship} on:newmood={handleNewMood} />
-  {#each relationship.moods as mood}
-    
-  <form method="POST" action="?/deleteMood">
-    <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
-    <input type="hidden" name="moodid" value={mood.id}/>
-    <div class="mood-row">
-      <div>{mood.name}</div>
-      <button type="submit">Delete</button>
-    </div>
-  </form>
-  {/each}
+  <hr />
+  <div class="mood-list">
+    {#each relationship.moods as mood}
+    <form method="POST" action="?/deleteMood">
+      <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
+      <input type="hidden" name="moodid" value={mood.id}/>
+      <div class="mood-row">
+        <div>{mood.name}</div>
+        <button type="submit">Delete</button>
+      </div>
+    </form>
+    {/each}
+  </div>
 </div>
 <style>  
 h3 {
   text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+hr {
+  width: 100%;
+  border-color: rgba(0,0,0,0.1);
 }
 .relationship-container {
   position: relative;
@@ -37,6 +45,13 @@ h3 {
   gap: 0.5em;
   display: flex;
   flex-direction: column;
+}
+.mood-list {
+  gap: 0.5em;
+  display: flex;
+  flex-direction: column;
+  height: 12em;
+  overflow-y: scroll;
 }
 
 .mood-row {

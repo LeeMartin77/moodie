@@ -12,6 +12,8 @@
 <div class="relationship-container">
   <h3>Needs</h3>
   <RelationshipNeedCreator relationship={relationship} on:newneed={handleNewNeed} />
+  <hr />
+  <div class="need-list">
   {#each relationship.needs as need}
     
   <form method="POST" action="?/deleteNeed">
@@ -23,10 +25,17 @@
     </div>
   </form>
   {/each}
+  </div>
 </div>
 <style>  
 h3 {
   text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+hr {
+  width: 100%;
+  border-color: rgba(0,0,0,0.1);
 }
 .relationship-container {
   position: relative;
@@ -37,6 +46,13 @@ h3 {
   gap: 0.5em;
   display: flex;
   flex-direction: column;
+}
+.need-list {
+  gap: 0.5em;
+  display: flex;
+  flex-direction: column;
+  height: 12em;
+  overflow-y: scroll;
 }
 
 .need-row {
