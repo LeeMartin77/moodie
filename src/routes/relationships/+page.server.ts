@@ -6,7 +6,8 @@ import {
   removeUserRelationship,
   updateUserRelationship,
   getAllDefaultNeeds,
-  getAllDefaultMoods
+  getAllDefaultMoods,
+  deleteCurrentMoodLog
 } from '$lib/storage';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
 import { userIdGenerator } from '$lib/userIdGenerator';
@@ -90,6 +91,7 @@ export const actions = {
       if (!relationshipid) {
         throw new Error("relationshipid is required")
       }
+      await deleteCurrentMoodLog(relationshipid, userIdGenerator(session.user))
       return await removeUserRelationship(userIdGenerator(session.user), relationshipid)
 		} catch (error: any) {
 			return fail(422, {

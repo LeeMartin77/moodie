@@ -27,65 +27,7 @@ export const insertRelationshipMoodLog = async ({
   passive
  }: Omit<RelationshipMoodLog, "time">): Promise<void> => {
 
-  const existingRes = await CASSANDRA_CLIENT.execute(
-    'SELECT * FROM moodie.relationship_mood_log WHERE relationshipid = ? and userid = ?;',
-    [relationshipid, userid],
-    { prepare: true }
-  );
-
-  const existing = existingRes.first();
-
-  if (existing) {
-    const old = rowToObject<RelationshipInvite>(existing);
-    await CASSANDRA_CLIENT.execute(
-      `INSERT INTO moodie.relationship_mood_log (
-        relationshipid,
-        userid,
-        time,
-        partnername,
-        feeling,
-        moodid,
-        mood,
-        positive,
-        negative,
-        needid,
-        need,
-        active,
-        passive
-      )
-      VALUES (
-        ?,
-        ?,
-        ?,
-        ?,
-        ?,
-        ?,
-        ?,
-        ?,
-        ?,
-        ?,
-        ?,
-        ?,
-        ?
-      )`,
-      [
-        old.relationshipid,
-        old.userid,
-        old.time,
-        old.partnername,
-        old.feeling,
-        old.moodid,
-        old.mood,
-        old.positive,
-        old.negative,
-        old.needid,
-        old.need,
-        old.active,
-        old.passive,
-      ],
-      { prepare: true }
-    );
-  }
+  await archiveCurrentMoodLog(relationshipid, userid);
 
   await CASSANDRA_CLIENT.execute(
     `INSERT INTO moodie.relationship_mood_log (
@@ -136,3 +78,74 @@ export const insertRelationshipMoodLog = async ({
     { prepare: true }
   );
 };
+
+export async function deleteCurrentMoodLog(relationshipid: string, userid: string) {
+  await archiveCurrentMoodLog(relationshipid, userid);
+  await CASSANDRA_CLIENT.execute(
+    'DELETE FROM moodie.relationship_mood_log WHERE relationshipid = ? and userid = ?;',
+    [relationshipid, userid],
+    { prepare: true }
+  );
+}
+
+async function archiveCurrentMoodLog(relationshipid: string, userid: string) {
+  const existingRes = await CASSANDRA_CLIENT.execute(
+    'SELECT * FROM moodie.relationship_mood_log WHERE relationshipid = ? and userid = ?;',
+    [relationshipid, userid],
+    { prepare: true }
+  );
+
+  const existing = existingRes.first();
+
+  if (existing) {
+    const old = rowToObject<RelationshipMoodLog>(existing);
+    await CASSANDRA_CLIENT.execute(
+      `INSERT INTO moodie.relationship_mood_log_history (
+        relationshipid,
+        userid,
+        time,
+        partnername,
+        feeling,
+        moodid,
+        mood,
+        positive,
+        negative,
+        needid,
+        need,
+        active,
+        passive
+      )
+      VALUES (
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?,
+        ?
+      )`,
+      [
+        old.relationshipid,
+        old.userid,
+        old.time,
+        old.partnername,
+        old.feeling,
+        old.moodid,
+        old.mood,
+        old.positive,
+        old.negative,
+        old.needid,
+        old.need,
+        old.active,
+        old.passive,
+      ],
+      { prepare: true }
+    );
+  }
+}
