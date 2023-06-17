@@ -1,10 +1,35 @@
 <script lang="ts">
-	import type { UserRelationship } from "$lib/storage";
+	import type { Mood, Need, UserRelationship } from "$lib/storage";
 	import MoodFeelingIndicator from "./MoodFeelingIndicator.svelte";
+	import RelationshipMoodCreator from "./RelationshipMoodCreator.svelte";
+	import RelationshipNeedCreator from "./RelationshipNeedCreator.svelte";
 
   export let relationship: UserRelationship
 
   let feeling = 3;
+
+  let logMood = '';
+  let logNeed = '';
+
+  const handleNewMood = ({ detail: { mood }}: CustomEvent<{ mood: Mood }>) => {
+    relationship.moods = [mood, ...relationship.moods]
+    relationship = relationship
+    logMood = mood.id
+  }
+
+  const handleNewNeed = ({ detail: { need }}: CustomEvent<{ need: Need }>) => {
+    relationship.needs = [need, ...relationship.needs]
+    relationship = relationship
+    logNeed = need.id
+  }
+
+  const moodLogButtonStyles = `
+            border: 1px solid black;
+            background-color: transparent;
+            border-radius: 1em;
+            width: 2.5em;
+            height: 2.5em;
+            padding: 0.5em;`
 </script>
 
 <div class="submit-container">
@@ -22,19 +47,33 @@
     </div>
     <div class="form-group">
       <label for="moodid">Mood</label>
-      <select id="moodid" name="moodid" required>
-        {#each relationship.moods as mood}
-          <option value={mood.id}>{mood.name}</option>
-        {/each}
-      </select>
+      <div class="dropdown-with-creator">
+        <select id="moodid" bind:value={logMood} name="moodid" required>
+          {#each relationship.moods as mood}
+            <option value={mood.id}>{mood.name}</option>
+          {/each}
+        </select>
+        <RelationshipMoodCreator relationship={relationship} 
+          on:newmood={handleNewMood}
+          buttonText={'+'}
+          buttonStyling={moodLogButtonStyles}
+            />
+      </div>
     </div>
     <div class="form-group">
       <label for="needid">Need</label>
-      <select id="needid" name="needid" required>
-        {#each relationship.needs as need}
-          <option value={need.id}>{need.name}</option>
-        {/each}
-      </select>
+      <div class="dropdown-with-creator">
+        <select id="needid" bind:value={logNeed} name="needid" required>
+          {#each relationship.needs as need}
+            <option value={need.id}>{need.name}</option>
+          {/each}
+        </select>
+        <RelationshipNeedCreator relationship={relationship} 
+          on:newneed={handleNewNeed}
+          buttonText={'+'}
+          buttonStyling={moodLogButtonStyles}
+            />
+      </div>
     </div>
     <button type="submit">Submit</button>
   </form>
@@ -89,5 +128,17 @@
     border-radius: 0.5em;
     font-weight: 700;
     margin-top: 1em;
+  }
+  
+  .dropdown-with-creator {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5em;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .dropdown-with-creator select {
+    flex-grow: 1;
   }
 </style>

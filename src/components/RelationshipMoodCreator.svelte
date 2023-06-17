@@ -4,6 +4,9 @@
   
   export let relationship: UserRelationship
 
+  export let buttonText: string = 'Create'
+  export let buttonStyling: string = ''
+
 	const dispatch = createEventDispatcher();
 
   let name: string | undefined;
@@ -17,14 +20,16 @@
 	}
 </script>
 
-<button on:click={() => {
+<button style={buttonStyling}
+  type="button"
+  on:click={() => {
   name = undefined;
   sentiment = undefined;
   error = undefined;
   // @ts-ignore
   document.getElementById("createMoodDialog").showModal()
 }}>
-  Create
+  {buttonText}
 </button>
 <dialog id="createMoodDialog">
   <form on:submit|preventDefault={() => {
@@ -73,7 +78,9 @@
     
     <button type="submit">Create</button>
   </form>
-  <button class="cancel-button" on:click={() => {
+  <button 
+  type="button"
+  class="cancel-button" on:click={() => {
     // @ts-ignore
     document.getElementById("createMoodDialog").close()
   }}>Cancel</button>

@@ -126,7 +126,7 @@ const NEED_SEED_VALUES = [
   ['romantic', 'emotional_support', 'Emotional Support', true, false],
   ['romantic', 'talking_time', 'Talking Time', true, false],
   ['romantic', 'physical_touch', 'Physical Touch', true, false],
-  ['romantic', 'sex_and_desire', 'Sex and Desire', true, false],
+  ['romantic', 'sex_and_desire', 'Sex', true, false],
   ['romantic', 'do_something_together', 'Do Something Together', true, false],
   ['romantic', 'decisions_made', 'Decisions Made For Me', true, false],
   ['romantic', 'affection', 'Affection', true, false],
