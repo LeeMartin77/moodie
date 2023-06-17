@@ -27,6 +27,11 @@ export const POST = async ({ request, locals, params: {relationshipid} }) => {
     if (missingFields.length > 0) {
       throw new Error(`Missing properties: {${missingFields.join(', ')}}`)
     }
+    const mood = relationship.moods.find(x => x.id === data.id)
+    if (mood) {
+      // delete existing first
+      await deleteUserRelationshipMood(userId, relationshipid, mood)
+    }
     await addUserRelationshipMood(userId, relationshipid, data);
     return json(data, { status: 200 });
   } catch (err: any) {
