@@ -54,7 +54,7 @@ export const DELETE = async ({ request, locals, params: {relationshipid} }) => {
       // noop
       return json({}, {status: 200});
     }
-    await deleteUserRelationshipMood(userId, relationshipid, data);
+    await deleteUserRelationshipMood(userId, relationshipid, mood);
     return json({}, {status: 200});
   } catch (err: any) {
     throw error(422, err.message);

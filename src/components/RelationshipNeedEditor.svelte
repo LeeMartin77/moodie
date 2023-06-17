@@ -3,10 +3,27 @@
 	import RelationshipNeedCreator from "./RelationshipNeedCreator.svelte";
 
   export let relationship: UserRelationship
-
+  let busy = false;
   const handleNewNeed = (disp: CustomEvent<{ need: Need }>) => {
     relationship.needs = [disp.detail.need, ...relationship.needs]
     relationship = relationship
+  }
+  const deleteNeed = (need: Need, index: number) => {
+    busy = true;
+    fetch(`/api/relationships/${relationship.relationshipid}/needs`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(need)
+      }).then(res => {
+        if (res.status === 200) {
+          relationship.needs.splice(index, 1)
+          relationship = relationship;
+        }
+      }).finally(() => {
+        busy = false;
+      })
   }
 </script>
 <div class="relationship-container">
@@ -14,16 +31,11 @@
   <RelationshipNeedCreator relationship={relationship} on:newneed={handleNewNeed} />
   <hr />
   <div class="need-list">
-  {#each relationship.needs as need}
-    
-  <form method="POST" action="?/deleteNeed">
-    <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
-    <input type="hidden" name="needid" value={need.id}/>
+  {#each relationship.needs as need, i}
     <div class="need-row">
       <div>{need.name}</div>
-      <button type="submit">Delete</button>
+      <button type="submit" on:click={() => deleteNeed(need, i)}>Delete</button>
     </div>
-  </form>
   {/each}
   </div>
 </div>
