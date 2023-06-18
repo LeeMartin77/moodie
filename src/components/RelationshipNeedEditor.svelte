@@ -4,8 +4,8 @@
 
   export let relationship: UserRelationship
   let busy = false;
-  const handleNewNeed = (disp: CustomEvent<{ need: Need }>) => {
-    relationship.needs = [disp.detail.need, ...relationship.needs]
+  const handleNewNeed = ({ detail: { need }}: CustomEvent<{ need: Need }>) => {
+    relationship.needs = [need, ...relationship.needs.filter(x => x.id !== need.id)]
     relationship = relationship
   }
   const deleteNeed = (need: Need, index: number) => {

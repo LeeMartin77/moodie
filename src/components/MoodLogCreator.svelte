@@ -12,13 +12,13 @@
   let logNeed = '';
 
   const handleNewMood = ({ detail: { mood }}: CustomEvent<{ mood: Mood }>) => {
-    relationship.moods = [mood, ...relationship.moods]
+    relationship.moods = [mood, ...relationship.moods.filter(x => x.id !== mood.id)]
     relationship = relationship
     logMood = mood.id
   }
 
-  const handleNewNeed = ({ detail: { need }}: CustomEvent<{ need: Need }>) => {
-    relationship.needs = [need, ...relationship.needs]
+  const handleNewNeed = ({ detail: { need }}: CustomEvent<{ need: Need }>) => {    
+    relationship.needs = [need, ...relationship.needs.filter(x => x.id !== need.id)]
     relationship = relationship
     logNeed = need.id
   }

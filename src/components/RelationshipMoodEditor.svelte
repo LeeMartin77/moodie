@@ -5,8 +5,8 @@
   export let relationship: UserRelationship
 
   let busy = false;
-  const handleNewMood = (disp: CustomEvent<{ mood: Mood }>) => {
-    relationship.moods = [disp.detail.mood, ...relationship.moods]
+  const handleNewMood = ({ detail: { mood }}: CustomEvent<{ mood: Mood }>) => {
+    relationship.moods = [mood, ...relationship.moods.filter(x => x.id !== mood.id)]
     relationship = relationship
   }
   const deleteMood = (mood: Mood, index: number) => {
