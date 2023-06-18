@@ -1,38 +1,41 @@
-# create-svelte
+# Moodie
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Moodie is a web application, designed to help people relationships show their feelings more easily.
 
-## Creating a project
+## Shouldn't people just talk?
 
-If you're seeing this, you've probably already done this step. Congrats!
+Yes - if anything, moodie is intended to *incentivise* conversation, rather than be a substitute for it. The project was incepted from the idea that having to continually update your partner on how you're feeling, if you're already in a trying time, can be emotionally burdensome.
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+It is deliberately designed to not replace talking to the people you're in a relationship with. Instead it can allow other members of the relationship to "temperature check" how everyone is feeling.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+## What does Moodie record?
 
-## Developing
+The "mood logs" of Moodie require three core things:
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+- Feeling: A score from 0 to 5 of a person's emotional capacity and energy
+- Mood: This is how a person is feeling
+  - Moods are loosely categorised as `positive`, `negative` and `neutral`
+- Need: This is what a person feels they need
+  - Needs are categorised as `active` or `passive`, which is whether it requires action on the part of another relationship member
 
-```bash
-npm run dev
+The logs also record the name of the person and the time at which it was recorded.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+## What's a relationship?
 
-## Building
+Moodie makes very little assumption of what a relationship is, or who can comprise one: 
 
-To create a production version of your app:
+- A person can have as many relationships as they want
+- Relationships can have as many or as few members as desired
+- The application doesn't assume sex or gender
+- Individuals in a relationship can independently configure their moods and needs
 
-```bash
-npm run build
-```
+The things that Moodie does enforce:
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+- A mood log is identical to all members of a relationship, including the name of the person
+  - This is because a relationship is intended for all members of it to communicate around
+  - People are not limited to sharing only one relationship, so it's possible to have different names/moods within different relationships, which may contain the same people
+- A mood log is immutable
+  - This means a person can't edit their mood, but they can post a new mood log at any time
+- A mood log can only express one mood and one need
+  - People and people in relationships are much more complicated than this, obviously
+  - The intent is to express the "top of mind" feelings, to aid in communication
