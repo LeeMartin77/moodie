@@ -43,7 +43,14 @@ export const actions = {
       if (!name) {
         throw new Error("Name is required")
       }
-      const [defaultNeeds, defaultMoods] = await Promise.all([getAllDefaultNeeds(),getAllDefaultMoods()])
+      const relationshiptype = data.get('relationshiptype') as string;
+      if (!relationshiptype) {
+        throw new Error("Relationship Type is required")
+      }
+      const [defaultNeeds, defaultMoods] = await Promise.all([
+        getAllDefaultNeeds(relationshiptype),
+        getAllDefaultMoods(relationshiptype)
+      ])
 
       return await createUserRelationship(userIdGenerator(session.user), name, myname, defaultMoods, defaultNeeds)
 		} catch (error: any) {
@@ -113,7 +120,7 @@ export const actions = {
         throw new Error("Inviter name is required")
       }
       if (!relationshipid) {
-        throw new Error("relationshipid is required")
+        throw new Error("relationshiptype is required")
       }
       const relationships = await getUserRelationships(userId);
       if (!relationships.map(x => x.relationshipid).includes(relationshipid)) {

@@ -1,3 +1,8 @@
+<script>
+
+	import { RELATIONSHIP_TYPE_KEY_NAMES } from "$lib/constants";
+
+</script>
 <h2>Create a new Relationship</h2>
 <div class="creator-container">
   <form method="POST" action="?/create">
@@ -8,6 +13,14 @@
     <div class="form-group">
       <label for="myname">Your Name</label>
       <input id="myname" name="myname" required/>
+    </div>
+    <div class="form-group">
+      <label for="relationshiptype">Initial Moods/Needs</label>
+      <select id="relationshiptype" name="relationshiptype" value="" required>
+        {#each Object.entries(RELATIONSHIP_TYPE_KEY_NAMES) as [key, name]}
+          <option value={key}>{name}</option>
+        {/each}
+      </select>
     </div>
     <button type="submit">Create New</button>
   </form>
@@ -42,6 +55,13 @@
     border: 1px solid lightgray;
   }
   
+  .form-group select {
+    border: 0;
+    padding: 0.5em;
+    font-size: 1em;
+    font-weight: 700;
+  }
+
   button {
     border: 0;
     padding: 1em;

@@ -52,13 +52,20 @@ export const actions = {
       if (!inviteid) {
         throw new Error("inviteid is required")
       }
+      const relationshiptype = data.get('relationshiptype') as string;
+      if (!relationshiptype) {
+        throw new Error("relationshiptype is required")
+      }
       const relationshipInvite = await getRelationshipInvite(inviteid);
       
       if (!relationshipInvite || relationshipInvite.redeemed) {
         throw redirect(302, '/relationships');
       }
 
-      const [defaultNeeds, defaultMoods] = await Promise.all([getAllDefaultNeeds(),getAllDefaultMoods()])
+      const [defaultNeeds, defaultMoods] = await Promise.all([
+        getAllDefaultNeeds(relationshiptype),
+        getAllDefaultMoods(relationshiptype)
+      ])
 
       await createUserRelationship(userid, name, myname, defaultMoods, defaultNeeds, relationshipInvite.relationshipid)
       await redeemRelationshipInvite(inviteid, userid);

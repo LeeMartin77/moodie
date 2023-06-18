@@ -1,10 +1,12 @@
 <script lang="ts">
+	import { RELATIONSHIP_TYPE_KEY_NAMES } from "$lib/constants";
 	import type { RelationshipInvite } from "$lib/storage";
 
   export let relationshipInvite: RelationshipInvite
 </script>
 
 <h2>Join a Relationship</h2>
+<h4>{relationshipInvite.invitername} has invited you to a relationship</h4>
 <div class="join-container">
   <form method="POST" action="?/accept">
     <input type="hidden" name="inviteid" value={relationshipInvite.id}/>
@@ -15,6 +17,14 @@
     <div class="form-group">
       <label for="myname">Your Name</label>
       <input id="myname" name="myname" value={'My Name'} required/>
+    </div>
+    <div class="form-group">
+      <label for="relationshiptype">Initial Moods/Needs</label>
+      <select id="relationshiptype" name="relationshiptype" value="" required>
+        {#each Object.entries(RELATIONSHIP_TYPE_KEY_NAMES) as [key, name]}
+          <option value={key}>{name}</option>
+        {/each}
+      </select>
     </div>
     <button type="submit">Accept</button>
   </form>
@@ -49,6 +59,13 @@
     border: 1px solid lightgray;
   }
   
+  .form-group select {
+    border: 0;
+    padding: 0.5em;
+    font-size: 1em;
+    font-weight: 700;
+  }
+
   button {
     border: 0;
     padding: 1em;

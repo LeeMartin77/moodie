@@ -96,8 +96,7 @@ const MIGRATIONS = [
   )`],
 ]
 
-// type id name positive negative
-const MOOD_SEED_VALUES = [
+const ROMANTIC_MOOD_SEED_VALUES = [
   ['romantic', 'content', 'Content', true, false],
   ['romantic', 'excited', 'Excited', true, false],
   ['romantic', 'passionate', 'Passionate', true, false],
@@ -119,10 +118,37 @@ const MOOD_SEED_VALUES = [
   ['romantic', 'hurt', 'Hurt', false, true],
   ['romantic', 'lonely', 'Lonely', false, true],
   ['romantic', 'unfulfilled', 'Unfulfilled', false, true],
+];
+
+const FRIENDLY_MOOD_SEED_VALUES = [
+  ['friendly', 'content', 'Content', true, false],
+  ['friendly', 'excited', 'Excited', true, false],
+  ['friendly', 'happy', 'Happy', true, false],
+  ['friendly', 'connected', 'Connected', true, false],
+  ['friendly', 'fulfilled', 'Fulfilled', true, false],
+  ['friendly', 'calm', 'Calm', true, false],
+  ['friendly', 'quiet', 'Quiet', false, false],
+  ['friendly', 'focused', 'Focused', false, false],
+  ['friendly', 'sad', 'Sad', false, true],
+  ['friendly', 'frustrated', 'Frustrated', false, true],
+  ['friendly', 'disappointed', 'Disappointed', false, true],
+  ['friendly', 'confused', 'Confused', false, true],
+  ['friendly', 'lonely', 'Lonely', false, true],
+];
+
+const BLANK_MOOD_SEED_VALUES = [
+  ['blank', 'positive', 'Positive', true, false],
+  ['blank', 'neutral', 'Neutral', false, false],
+  ['blank', 'negative', 'Negative', false, true],
+]
+// type id name positive negative
+const MOOD_SEED_VALUES = [
+  ...ROMANTIC_MOOD_SEED_VALUES,
+  ...FRIENDLY_MOOD_SEED_VALUES,
+  ...BLANK_MOOD_SEED_VALUES
 ]
 
-// type id name active passive
-const NEED_SEED_VALUES = [
+const ROMANTIC_NEED_SEED_VALUES = [
   ['romantic', 'emotional_support', 'Emotional Support', true, false],
   ['romantic', 'talking_time', 'Talking Time', true, false],
   ['romantic', 'physical_touch', 'Physical Touch', true, false],
@@ -132,7 +158,6 @@ const NEED_SEED_VALUES = [
   ['romantic', 'affection', 'Affection', true, false],
   ['romantic', 'attention', 'Attention', true, false],
   ['romantic', 'encouragement', 'Encouragement', true, false],
-
   ['romantic', 'nothing', 'Nothing', false, true],
   ['romantic', 'stability', 'Stability', false, true],
   ['romantic', 'time_alone', 'Time Alone', false, true],
@@ -142,6 +167,30 @@ const NEED_SEED_VALUES = [
   ['romantic', 'solace', 'Solace', false, true],
   ['romantic', 'routine', 'Routine', false, true],
   ['romantic', 'appreciation', 'Appreciation', false, true],
+]
+
+
+const FRIENDLY_NEED_SEED_VALUES = [
+  ['friendly', 'emotional_support', 'Emotional Support', true, false],
+  ['friendly', 'talking_time', 'Talking Time', true, false],
+  ['friendly', 'do_something_together', 'Do Something Together', true, false],
+  ['friendly', 'encouragement', 'Encouragement', true, false],
+  ['friendly', 'nothing', 'Nothing', false, true],
+  ['friendly', 'stability', 'Stability', false, true],
+  ['friendly', 'quiet_time_together', 'Quiet Time Together', false, true],
+  ['friendly', 'comfort', 'Comfort', false, true],
+  ['friendly', 'solace', 'Solace', false, true],
+]
+
+const BLANK_NEED_SEED_VALUES = [
+  ['blank', 'nothing', 'Nothing', false, true],
+]
+
+// type id name active passive
+const NEED_SEED_VALUES = [
+  ...ROMANTIC_NEED_SEED_VALUES,
+  ...FRIENDLY_NEED_SEED_VALUES,
+  ...BLANK_NEED_SEED_VALUES
 ]
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
