@@ -1,6 +1,6 @@
 # Moodie
 
-Moodie is a web application, designed to help people relationships show their feelings more easily.
+Moodie is a web application, designed to help people in relationships share their feelings more easily.
 
 ## Shouldn't people just talk?
 
