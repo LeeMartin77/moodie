@@ -1,18 +1,30 @@
 <script lang="ts">
 	import type { UserRelationship } from "$lib/storage";
+  import { liveQuery, type Observable } from "dexie"
+  import { db } from "$lib/indexdb"
 	import { onMount } from "svelte";
 
   export let relationship: UserRelationship;
 
-  let notificationsOn = false;
+  let notificationsOn: Observable<boolean> 
 
-  const turnOnNotifications = () => {
-    localStorage.setItem(`${relationship.relationshipid}_notifications`, 'enabled');
-    notificationsOn = true;
+  const turnOnNotifications = async () => {
+    const exists = await db.notifications.where('relationshipid').equals(relationship.relationshipid).first();
+    if (exists) {
+      await db.notifications.update(relationship.relationshipid, {
+        enabled: true
+      })
+    } else {
+
+      await db.notifications.add({
+        relationshipid: relationship.relationshipid,
+        enabled: true
+      })
+    }
   }
 
-  const toggleNotifications = () => {
-    if (!notificationsOn) {
+  const toggleNotifications = async () => {
+    if (!$notificationsOn) {
       if (Notification.permission !== 'granted') {
         Notification.requestPermission().then((perm) => {
           if (perm === 'granted') {
@@ -23,19 +35,24 @@
         turnOnNotifications();
       }
     } else {
-      localStorage.setItem(`${relationship.relationshipid}_notifications`, 'disabled');
-      notificationsOn = false;
+      await db.notifications.update(relationship.relationshipid, {
+        enabled: false
+      })
     }
   }
 
-  onMount(async () => {
-    notificationsOn = localStorage.getItem(`${relationship.relationshipid}_notifications`) === 'enabled' && Notification.permission === 'granted';
-  });
+  onMount(() => {
+    notificationsOn = liveQuery(() => {
+      return db.notifications.where('relationshipid').equals(relationship.relationshipid).first().then((val) => {
+        return val && val.enabled && Notification.permission === 'granted' || false;
+      })
+    })
+  })
 </script>
 
 <div class="relationship-title">
   <h2>{relationship.name}</h2>
-  {#if notificationsOn}
+  {#if $notificationsOn}
     <button aria-label="Toggle Notifications - Currently On"
       on:click={toggleNotifications}
       class="notification-toggle-button">
