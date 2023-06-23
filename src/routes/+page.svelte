@@ -16,7 +16,7 @@
 <h1>Your Relationship Moods</h1>
 {#each data.userRelationships as relationship}
   <div class="relationship-container">
-    <RelationshipTitle relationship={relationship}/>
+    <RelationshipTitle relationship={relationship} notificationsEnabled={data.notificationsEnabled}/>
     {#each data.relationshipMoodLogs.filter(x => x.relationshipid === relationship.relationshipid) as moodLog}
       <MoodSummary moodLog={moodLog} isMe={moodLog.userid === data.userId}/>
     {/each}

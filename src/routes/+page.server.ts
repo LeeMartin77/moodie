@@ -6,6 +6,7 @@ import {
 } from '$lib/storage';
 import { error, fail, redirect, type Actions } from '@sveltejs/kit';
 import { userIdGenerator } from '$lib/userIdGenerator';
+import { env } from "$env/dynamic/private";
 
 export const load = async ({ parent }: PageServerLoadEvent) => {
   const { session, userId } = await parent();
@@ -22,10 +23,12 @@ export const load = async ({ parent }: PageServerLoadEvent) => {
     await getLatestRelationshipMoodLogs(userRelationships.map(x => x.relationshipid)) :
     [];
 
+  const notificationsEnabled: boolean = env.MOODIE_NOTIFICATIONS_FEATURE === "true";
   return {
     userId,
     userRelationships,
-    relationshipMoodLogs
+    relationshipMoodLogs,
+    notificationsEnabled
   };
 }
 
