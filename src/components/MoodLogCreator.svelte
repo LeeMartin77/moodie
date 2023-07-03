@@ -1,28 +1,39 @@
 <script lang="ts">
-	import type { Mood, Need, UserRelationship } from "$lib/storage";
+	import type { Mood, Need, RelationshipMoodLog, UserRelationship } from "$lib/storage";
+  import { createEventDispatcher } from 'svelte';
 	import MoodFeelingIndicator from "./MoodFeelingIndicator.svelte";
 	import RelationshipMoodCreator from "./RelationshipMoodCreator.svelte";
 	import RelationshipNeedCreator from "./RelationshipNeedCreator.svelte";
 
   export let relationship: UserRelationship
 
+	const dispatch = createEventDispatcher();
+
   let feeling = 3;
 
-  let logMood = '';
-  let logNeed = '';
+  let moodid = '';
+  let needid = '';
+
+  let error;
+  let loading = false;
 
   const handleNewMood = ({ detail: { mood }}: CustomEvent<{ mood: Mood }>) => {
     relationship.moods = [mood, ...relationship.moods.filter(x => x.id !== mood.id)]
     relationship = relationship
-    logMood = mood.id
+    moodid = mood.id
   }
 
   const handleNewNeed = ({ detail: { need }}: CustomEvent<{ need: Need }>) => {    
     relationship.needs = [need, ...relationship.needs.filter(x => x.id !== need.id)]
     relationship = relationship
-    logNeed = need.id
+    needid = need.id
   }
 
+  function dispatchNewLog(log: RelationshipMoodLog) {
+		dispatch('newlog', {
+			log
+		});
+	}
   const moodLogButtonStyles = `
             border: 1px solid black;
             background-color: transparent;
@@ -35,9 +46,35 @@
 <div class="submit-container">
 
   <h4>Update your mood for {relationship.name}</h4>
-  <form method="POST" action="?/addlog">
-    <input type="hidden" name="relationshipid" value={relationship.relationshipid}/>
-    <input type="hidden" name="partnername" value={relationship.myname}/>
+  <form method="POST" on:submit|preventDefault={() => {
+    relationship.relationshipid
+    error = undefined;
+    loading = true;
+      fetch(`/api/relationships/${relationship.relationshipid}/logs`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          moodid,
+          needid,
+          feeling,
+          partnername: relationship.myname,
+        })
+      }).then(res => {
+        if (res.status !== 200) {
+            throw new Error('Something went wrong!')
+          } 
+          return res.json()
+      })
+        .then((response) => {
+            dispatchNewLog({...response, time: Date.parse(response.time)})
+        }).catch(err => {
+          error = err;
+        }).finally(() => {
+          loading = false;
+        })
+  }}>
     <div class="form-group">
       <div class="feeling-label-with-indicator">
         <label for="feeling" >Feeling</label>
@@ -48,7 +85,7 @@
     <div class="form-group">
       <label for="moodid">Mood</label>
       <div class="dropdown-with-creator">
-        <select id="moodid" bind:value={logMood} name="moodid" required>
+        <select id="moodid" bind:value={moodid} name="moodid" required>
           {#each relationship.moods as mood}
             <option value={mood.id}>{mood.name}</option>
           {/each}
@@ -63,7 +100,7 @@
     <div class="form-group">
       <label for="needid">Need</label>
       <div class="dropdown-with-creator">
-        <select id="needid" bind:value={logNeed} name="needid" required>
+        <select id="needid" bind:value={needid} name="needid" required>
           {#each relationship.needs as need}
             <option value={need.id}>{need.name}</option>
           {/each}
@@ -75,7 +112,7 @@
             />
       </div>
     </div>
-    <button type="submit">Submit</button>
+    <button type="submit" disabled={loading}>Submit</button>
   </form>
 </div>
 

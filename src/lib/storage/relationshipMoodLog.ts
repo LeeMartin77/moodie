@@ -25,10 +25,10 @@ export const insertRelationshipMoodLog = async ({
   need,
   active,
   passive
- }: Omit<RelationshipMoodLog, "time">): Promise<void> => {
+ }: Omit<RelationshipMoodLog, "time">): Promise<RelationshipMoodLog> => {
 
   await archiveCurrentMoodLog(relationshipid, userid);
-
+  const time = new Date().toISOString();
   await CASSANDRA_CLIENT.execute(
     `INSERT INTO moodie.relationship_mood_log (
       relationshipid,
@@ -73,10 +73,25 @@ export const insertRelationshipMoodLog = async ({
       need,
       active,
       passive,
-      new Date().toISOString()
+      time
     ],
     { prepare: true }
   );
+  return {
+    relationshipid,
+      userid,
+      partnername,
+      feeling,
+      moodid,
+      mood,
+      positive,
+      negative,
+      needid,
+      need,
+      active,
+      passive,
+      time
+  }
 };
 
 export async function deleteCurrentMoodLog(relationshipid: string, userid: string) {
