@@ -4,7 +4,7 @@ Moodie is a web application, designed to help people in relationships share thei
 
 ## Shouldn't people just talk?
 
-Yes - if anything, moodie is intended to *incentivise* conversation, rather than be a substitute for it. The project was incepted from the idea that having to continually update someone on how you're feeling, if you're already in a trying time, can be emotionally burdensome.
+Yes - if anything, moodie is intended to _incentivise_ conversation, rather than be a substitute for it. The project was incepted from the idea that having to continually update someone on how you're feeling, if you're already in a trying time, can be emotionally burdensome.
 
 It is deliberately designed to not replace talking to the people you're in a relationship with. Instead it can allow other members of the relationship to "temperature check" how everyone is feeling.
 
@@ -22,7 +22,7 @@ The logs also record the name of the person and the time at which it was recorde
 
 ## What's a relationship?
 
-Moodie makes very little assumption of what a relationship is, or who can comprise one: 
+Moodie makes very little assumption of what a relationship is, or who can comprise one:
 
 - A person can have as many relationships as they want
 - Relationships can have as many or as few members as desired

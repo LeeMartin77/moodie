@@ -5,18 +5,20 @@ import { userIdGenerator } from '$lib/userIdGenerator';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 export const load: LayoutServerLoad = async (event) => {
-  const session = await event.locals.getSession();
-  if ((!session || !session.user?.email)
-      && !event.url.pathname.startsWith('/auth')
-      && !event.url.pathname.startsWith('/relationships/join')) {
-    throw redirect(302, '/auth/signin');
-  }
-  if (!session || !session.user?.email) {
-    return {}
-  } 
-  
-  return {
-    session,
-    userId: userIdGenerator(session.user)
-  };
+	const session = await event.locals.getSession();
+	if (
+		(!session || !session.user?.email) &&
+		!event.url.pathname.startsWith('/auth') &&
+		!event.url.pathname.startsWith('/relationships/join')
+	) {
+		throw redirect(302, '/auth/signin');
+	}
+	if (!session || !session.user?.email) {
+		return {};
+	}
+
+	return {
+		session,
+		userId: userIdGenerator(session.user)
+	};
 };

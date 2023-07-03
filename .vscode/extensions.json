@@ -1,6 +1,3 @@
 {
-  "recommendations": [
-    "svelte.svelte-vscode",
-    "antfu.vite"
-  ],
+	"recommendations": ["svelte.svelte-vscode", "antfu.vite"]
 }
