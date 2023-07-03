@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { each } from 'svelte/internal';
-
 	export let feeling: number;
 
 	const maxValue = 5;
