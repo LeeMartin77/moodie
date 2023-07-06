@@ -9,12 +9,12 @@ export const POST = async ({ request, locals, params: { relationshipid } }) => {
 	}
 	const userid = userIdGenerator(session.user);
 	const data = await request.json();
-	const fields = ['partnername', 'feeling', 'moodid', 'needid'];
+	const fields = ['partnername', 'moodid', 'needid'];
 	const neededData = fields.map((x) => {
 		return data[x];
 	});
 	try {
-		if (!neededData.every((x) => !!x)) {
+		if (neededData.some((x) => x === undefined)) {
 			throw new Error('Missing required data');
 		}
 		const [partnername, feeling, moodid, needid] = neededData as string[];
