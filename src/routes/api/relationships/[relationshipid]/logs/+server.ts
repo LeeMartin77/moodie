@@ -1,15 +1,16 @@
 import { getUserRelationships, insertRelationshipMoodLog } from '$lib/storage';
 import { userIdGenerator } from '$lib/userIdGenerator';
-import { error, json } from '@sveltejs/kit';
+import { error, json, redirect } from '@sveltejs/kit';
+import type { RequestHandler } from "./$types"
 
-export const POST = async ({ request, locals, params: { relationshipid } }) => {
+export const POST: RequestHandler = async ({ request, locals, params: { relationshipid } }) => {
 	const session = await locals.getSession();
 	if (!session || !session.user) {
 		throw redirect(302, '/auth/signin');
 	}
 	const userid = userIdGenerator(session.user);
 	const data = await request.json();
-	const fields = ['partnername', 'moodid', 'needid'];
+	const fields = ['partnername', 'feeling', 'moodid', 'needid'];
 	const neededData = fields.map((x) => {
 		return data[x];
 	});
@@ -24,13 +25,11 @@ export const POST = async ({ request, locals, params: { relationshipid } }) => {
 		if (!relationship) {
 			throw new Error('Invalid relationshipid');
 		}
-
 		const feelingInt = parseInt(feeling);
 
 		if (isNaN(feelingInt)) {
 			throw new Error('Invalid feeling');
 		}
-
 		const mood = Array.from(relationship.moods).find((x) => x.id === moodid);
 		const need = Array.from(relationship.needs).find((x) => x.id === needid);
 
@@ -41,7 +40,7 @@ export const POST = async ({ request, locals, params: { relationshipid } }) => {
 		if (!need) {
 			throw new Error('Invalid needid');
 		}
-
+		
 		const newlog = await insertRelationshipMoodLog({
 			relationshipid,
 			userid,
